@@ -7,267 +7,589 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  .h-icon,.sec-title,header h1 span{color:var(--accent)}.sec-title,header{border-bottom:1px solid var(--border);display:flex}.fuel-pills,.upload-zone p{margin-top:5px}.fuel-pill,.fuel-pills,.logo-preview.on,.panel,.sec-title,.workspace,body,header{display:flex}.btn-sm,.fuel-pill,.upload-zone,select{cursor:pointer}#card,.btn-dl,.sec-title,header h1{font-family:'Barlow Condensed',sans-serif}.badge-inner,.btn-dl,.card-brand,.dealer-name,.sec-title,header h1,label{text-transform:uppercase}:root{--bg:#0f0f13;--surface:#1a1a22;--border:#2e2e3e;--accent:#ff0000;--text:#e8e8f0;--muted:#7070a0;--radius:12px}*{box-sizing:border-box;margin:0;padding:0}body{background:var(--bg);color:var(--text);font-family:Barlow,sans-serif;min-height:100vh;flex-direction:column}header{padding:16px 28px;align-items:center;gap:12px;background:#13131a}header h1{font-weight:900;font-size:20px;letter-spacing:.08em}.h-icon{width:26px;height:26px;flex-shrink:0}.workspace{flex:1;overflow:hidden}.panel{width:340px;min-width:340px;background:var(--surface);border-right:1px solid var(--border);overflow-y:auto;padding:18px 15px 40px;flex-direction:column;gap:20px}.panel::-webkit-scrollbar{width:4px}.panel::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}.sec-title{align-items:center;gap:7px;font-size:10px;font-weight:700;letter-spacing:.18em;margin-bottom:11px;padding-bottom:6px}.fuel-pill,label{color:var(--muted);font-weight:600}.sec-title svg{width:12px;height:12px;flex-shrink:0}label{display:block;font-size:11px;margin-bottom:4px;margin-top:9px;letter-spacing:.1em}input[type=text],select,textarea{width:100%;background:#0f0f13;border:1px solid var(--border);border-radius:8px;color:var(--text);padding:8px 10px;font-family:Barlow,sans-serif;font-size:13px;outline:0;transition:border-color .2s;appearance:none}.fuel-pill.active,.fuel-pill:hover,.upload-zone:hover,input[type=text]:focus,select:focus,textarea:focus{border-color:var(--accent)}textarea{resize:vertical;min-height:50px;line-height:1.5}select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237070a0' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}.fuel-pills{gap:5px;flex-wrap:wrap}.fuel-pill,.logo-preview{background:#0f0f13;align-items:center}.fuel-pill{gap:5px;padding:6px 11px;border-radius:20px;border:1.5px solid var(--border);font-size:12px;transition:.18s;user-select:none}.fuel-pill svg{width:13px;height:13px;flex-shrink:0}.fuel-pill:hover{color:var(--text)}.fuel-pill.active{background:var(--accent);color:#fff}.upload-zone{border:2px dashed var(--border);border-radius:10px;padding:18px;text-align:center;transition:border-color .2s,background .2s;background:#0f0f13}.upload-zone:hover{background:#130a0a}.upload-zone svg{width:26px;height:26px;color:var(--accent)}.btn-sm,.upload-zone p{color:var(--muted);font-size:12px}.logo-preview{display:none;margin-top:9px;border:1px solid var(--border);border-radius:8px;padding:8px 10px;justify-content:space-between;gap:8px}.logo-preview img{height:34px;max-width:110px;object-fit:contain}.btn-sm{background:0 0;border:1px solid #44444f;border-radius:6px;padding:4px 9px;transition:.2s}.btn-del:hover,.btn-sm:hover{border-color:#ff4d4d;color:#ff4d4d}.saved-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;color:#4caf50;margin-top:5px;opacity:0;transition:opacity .4s}.btn-add,.btn-del{color:var(--muted);transition:.2s;background:0 0;cursor:pointer}.saved-badge svg{width:11px;height:11px}.saved-badge.on{opacity:1}.vehicle-thumb{margin-top:9px;border-radius:8px;overflow:hidden;display:none}.vehicle-thumb img{width:100%;display:block;max-height:100px;object-fit:cover}.options-list{display:flex;flex-direction:column;gap:5px}.btn-del,.option-row{display:flex;align-items:center}.option-row{gap:5px}.option-row input{flex:1}.btn-del{border:1px solid #44444f;border-radius:6px;padding:5px 8px}.btn-add,.color-row{display:flex;align-items:center}.btn-del svg{width:12px;height:12px}.btn-add{margin-top:7px;width:100%;border:1px dashed var(--border);border-radius:8px;padding:7px;font-size:12px;justify-content:center;gap:5px}.btn-add svg,.opts-header svg{width:13px;height:13px}.btn-add:hover{border-color:var(--accent);color:var(--accent)}.color-row{justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px solid #1f1f2a}.cright,.toggle-row{display:flex;align-items:center}.color-row:last-of-type{border-bottom:none}.clabel{font-size:12px;font-weight:500;color:var(--text)}.cright{gap:5px}.presets{display:flex;gap:4px}.preset{width:19px;height:19px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:transform .15s,border-color .15s;flex-shrink:0}.preset:hover{transform:scale(1.3);border-color:rgba(255,255,255,.4)}input[type=color]{width:32px;height:26px;border:1px solid var(--border);border-radius:5px;background:0 0;cursor:pointer;padding:2px}.toggle-row{justify-content:space-between;padding:6px 0}.toggle{position:relative;display:inline-block;width:36px;height:20px}.tslider,.tslider:before{position:absolute;transition:.3s}.toggle input{opacity:0;width:0;height:0}.tslider{cursor:pointer;inset:0;background:var(--border);border-radius:20px}#card,.card-img-wrap{position:relative;overflow:hidden}.btn-dl,.toggle input:checked+.tslider{background:var(--accent)}.tslider:before{content:"";height:14px;width:14px;left:3px;bottom:3px;background:#fff;border-radius:50%}.toggle input:checked+.tslider:before{transform:translateX(16px)}.btn-dl{width:100%;padding:13px;border:none;border-radius:var(--radius);color:#fff;font-size:15px;font-weight:800;letter-spacing:.12em;cursor:pointer;transition:opacity .2s,transform .1s;display:flex;align-items:center;justify-content:center;gap:7px}.btn-dl svg{width:16px;height:16px}.btn-dl:hover{opacity:.88;transform:translateY(-1px)}.btn-dl:disabled{opacity:.5;cursor:not-allowed;transform:none}.preview-area{flex:1;display:flex;align-items:center;justify-content:center;padding:36px;background:repeating-conic-gradient(#1a1a22 0 25%,#0f0f13 0 50%) 0 0/20px 20px;overflow:auto}#card{width:800px;height:800px;background:#fff;box-shadow:0 40px 120px rgba(0,0,0,.6);flex-shrink:0;display:flex;flex-direction:column}.card-header,.logo-area{display:flex;align-items:center}.card-header{background:#f2f2f2;padding:12px 18px 10px;gap:12px;border-bottom:3px solid #ddd}.logo-area{gap:10px}#cLogoImg{height:44px;max-width:130px;object-fit:contain;display:none}#cLogoDefault{width:44px;height:44px;display:flex;align-items:center;justify-content:center}.dealer-name{font-size:10px;font-weight:600;color:#888;font-family:Barlow,sans-serif;letter-spacing:.1em}.card-brand,.card-year{font-size:30px;line-height:1}.badge-inner,.card-brand,.card-year,.stat-val{font-weight:900}.card-title-area{flex:1;text-align:right}.card-brand{font-family:'Barlow Condensed',sans-serif;letter-spacing:.03em;color:#111}.card-year{margin-left:8px}.card-img-wrap{background:#e0e0e0;flex:1;display:flex;align-items:center;justify-content:center}.badge-inner,.badge-wrap{position:absolute;width:240px}#cardImg{width:100%;height:100%;object-fit:cover;display:none}.img-placeholder{color:#aaa;text-align:center;font-family:Barlow,sans-serif;font-size:13px;display:flex;flex-direction:column;align-items:center;gap:8px}.img-placeholder svg{width:52px;height:52px}.badge-wrap{top:0;right:0;height:240px;overflow:hidden}.badge-inner{top:46px;right:-48px;text-align:center;font-family:'Barlow Condensed',sans-serif;font-size:30px;color:#fff;letter-spacing:.06em;transform:rotate(45deg);padding:12px 0}.stat,.stat-tx{padding:12px 14px;gap:9px;display:flex}.card-stats{display:flex;align-items:stretch;border-top:3px solid #ddd}.stat{flex:1;align-items:center;border-right:2px solid #ddd;background:#f9f9f9}.stat-ico,.stat-tx svg{width:22px;height:22px;flex-shrink:0}.stat-ico svg{width:100%;height:100%}.stat-val{font-size:19px;color:#111;line-height:1}.stat-lbl{font-size:9px;color:#999;font-family:Barlow,sans-serif;text-transform:uppercase;letter-spacing:.08em;margin-top:2px}.opts-header,.stat-tx-text{font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;color:#fff}.stat-tx{flex:1.5;align-items:center}.stat-tx-text{font-size:15px;font-weight:800;letter-spacing:.04em;line-height:1.15}.card-options{padding:11px 17px 13px;background:#fff;border-top:2px solid #eee}.opts-header{font-size:17px;font-weight:900;letter-spacing:.05em;margin-bottom:8px;display:inline-flex;align-items:center;gap:5px;padding:3px 11px;border-radius:4px}.card-footer,.opt-item{font-family:Barlow,sans-serif}.opts-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px}.opt-item{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:#333}.card-footer,.opt-check{align-items:center;color:#fff;display:flex}.opt-check{width:16px;height:16px;border-radius:50%;justify-content:center;flex-shrink:0}.opt-check svg{width:9px;height:9px}.card-footer{justify-content:space-between;padding:10px 20px}.footer-phone{font-weight:800;font-size:17px;letter-spacing:.05em}.footer-lbl{font-size:10px;opacity:.8;margin-bottom:1px}.footer-addr{font-size:13px;opacity:.9;font-weight:500}.footer-right{display:flex;align-items:center;gap:6px}.footer-right svg{width:14px;height:14px;opacity:.8}@keyframes spin{to{transform:rotate(360deg)}}
+  :root {
+    --bg: #0f0f13;
+    --surface: #1a1a22;
+    --border: #2e2e3e;
+    --accent: #ff0000;
+    --text: #e8e8f0;
+    --muted: #7070a0;
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Barlow', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
+  header { padding: 16px 28px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; background: #13131a; }
+  header h1 { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 20px; letter-spacing: .08em; text-transform: uppercase; }
+  header h1 span { color: var(--accent); }
+  .h-icon { width: 26px; height: 26px; color: var(--accent); flex-shrink: 0; }
+  .workspace { display: flex; flex: 1; overflow: hidden; }
+
+  .panel { width: 340px; min-width: 340px; background: var(--surface); border-right: 1px solid var(--border); overflow-y: auto; padding: 18px 15px 40px; display: flex; flex-direction: column; gap: 20px; }
+  .panel::-webkit-scrollbar { width: 4px; }
+  .panel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  .sec-title { display: flex; align-items: center; gap: 7px; font-family: 'Barlow Condensed', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--accent); margin-bottom: 11px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+  .sec-title svg { width: 12px; height: 12px; flex-shrink: 0; }
+
+  label { display: block; font-size: 11px; font-weight: 600; color: var(--muted); margin-bottom: 4px; margin-top: 9px; text-transform: uppercase; letter-spacing: .1em; }
+
+  input[type="text"], textarea, select { width: 100%; background: #0f0f13; border: 1px solid var(--border); border-radius: 8px; color: var(--text); padding: 8px 10px; font-family: 'Barlow', sans-serif; font-size: 13px; outline: none; transition: border-color .2s; appearance: none; }
+  input[type="text"]:focus, textarea:focus, select:focus { border-color: var(--accent); }
+  textarea { resize: vertical; min-height: 50px; line-height: 1.5; }
+  select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237070a0' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px; cursor: pointer; }
+
+  .fuel-pills { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 5px; }
+  .fuel-pill { display: flex; align-items: center; gap: 5px; padding: 6px 11px; border-radius: 20px; border: 1.5px solid var(--border); background: #0f0f13; color: var(--muted); font-size: 12px; font-weight: 600; cursor: pointer; transition: all .18s; user-select: none; }
+  .fuel-pill svg { width: 13px; height: 13px; flex-shrink: 0; }
+  .fuel-pill:hover { border-color: var(--accent); color: var(--text); }
+  .fuel-pill.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  .upload-zone { border: 2px dashed var(--border); border-radius: 10px; padding: 18px; text-align: center; cursor: pointer; transition: border-color .2s, background .2s; background: #0f0f13; }
+  .upload-zone:hover { border-color: var(--accent); background: #130a0a; }
+  .upload-zone svg { width: 26px; height: 26px; color: var(--accent); }
+  .upload-zone p { font-size: 12px; color: var(--muted); margin-top: 5px; }
+  .logo-preview { display: none; margin-top: 9px; background: #0f0f13; border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; align-items: center; justify-content: space-between; gap: 8px; }
+  .logo-preview.on { display: flex; }
+  .logo-preview img { height: 34px; max-width: 110px; object-fit: contain; }
+  .btn-sm { background: none; border: 1px solid #44444f; color: var(--muted); border-radius: 6px; padding: 4px 9px; cursor: pointer; font-size: 12px; transition: all .2s; }
+  .btn-sm:hover { border-color: #ff4d4d; color: #ff4d4d; }
+  .saved-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; color: #4caf50; margin-top: 5px; opacity: 0; transition: opacity .4s; }
+  .saved-badge svg { width: 11px; height: 11px; }
+  .saved-badge.on { opacity: 1; }
+  .vehicle-thumb { margin-top: 9px; border-radius: 8px; overflow: hidden; display: none; }
+  .vehicle-thumb img { width: 100%; display: block; max-height: 100px; object-fit: cover; }
+
+  .options-list { display: flex; flex-direction: column; gap: 5px; }
+  .option-row { display: flex; gap: 5px; align-items: center; }
+  .option-row input { flex: 1; }
+  .btn-del { background: none; border: 1px solid #44444f; color: var(--muted); border-radius: 6px; padding: 5px 8px; cursor: pointer; transition: all .2s; display: flex; align-items: center; }
+  .btn-del svg { width: 12px; height: 12px; }
+  .btn-del:hover { border-color: #ff4d4d; color: #ff4d4d; }
+  .btn-add { margin-top: 7px; width: 100%; background: none; border: 1px dashed var(--border); color: var(--muted); border-radius: 8px; padding: 7px; cursor: pointer; font-size: 12px; transition: all .2s; display: flex; align-items: center; justify-content: center; gap: 5px; }
+  .btn-add svg { width: 13px; height: 13px; }
+  .btn-add:hover { border-color: var(--accent); color: var(--accent); }
+
+  .color-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 0; border-bottom: 1px solid #1f1f2a; }
+  .color-row:last-of-type { border-bottom: none; }
+  .clabel { font-size: 12px; font-weight: 500; color: var(--text); }
+  .cright { display: flex; align-items: center; gap: 5px; }
+  .presets { display: flex; gap: 4px; }
+  .preset { width: 19px; height: 19px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: transform .15s, border-color .15s; flex-shrink: 0; }
+  .preset:hover { transform: scale(1.3); border-color: rgba(255,255,255,.4); }
+  input[type="color"] { width: 32px; height: 26px; border: 1px solid var(--border); border-radius: 5px; background: none; cursor: pointer; padding: 2px; }
+  .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; }
+  .toggle { position: relative; display: inline-block; width: 36px; height: 20px; }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .tslider { position: absolute; cursor: pointer; inset: 0; background: var(--border); transition: .3s; border-radius: 20px; }
+  .tslider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background: white; transition: .3s; border-radius: 50%; }
+  .toggle input:checked + .tslider { background: var(--accent); }
+  .toggle input:checked + .tslider:before { transform: translateX(16px); }
+
+  .btn-dl { width: 100%; padding: 13px; background: var(--accent); border: none; border-radius: var(--radius); color: #fff; font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; cursor: pointer; transition: opacity .2s, transform .1s; display: flex; align-items: center; justify-content: center; gap: 7px; }
+  .btn-dl svg { width: 16px; height: 16px; }
+  .btn-dl:hover { opacity: .88; transform: translateY(-1px); }
+  .btn-dl:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+
+  .preview-area { flex: 1; display: flex; align-items: center; justify-content: center; padding: 36px; background: repeating-conic-gradient(#1a1a22 0% 25%, #0f0f13 0% 50%) 0 0/20px 20px; overflow: auto; }
+
+  #card { width: 800px; height: 800px; background: #fff; font-family: 'Barlow Condensed', sans-serif; box-shadow: 0 40px 120px rgba(0,0,0,.6); position: relative; overflow: hidden; flex-shrink: 0; display: flex; flex-direction: column; }
+  .card-header { background: #f2f2f2; padding: 12px 18px 10px; display: flex; align-items: center; gap: 12px; border-bottom: 3px solid #ddd; }
+  .logo-area { display: flex; align-items: center; gap: 10px; }
+  #cLogoImg { height: 44px; max-width: 130px; object-fit: contain; display: none; }
+  #cLogoDefault { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; }
+  .dealer-name { font-size: 10px; font-weight: 600; color: #888; font-family: 'Barlow', sans-serif; text-transform: uppercase; letter-spacing: .1em; }
+  .card-title-area { flex: 1; text-align: right; }
+  .card-brand { font-family: 'Barlow Condensed', sans-serif; font-size: 30px; font-weight: 900; letter-spacing: .03em; text-transform: uppercase; color: #111; line-height: 1; }
+  .card-year { font-size: 30px; font-weight: 900; margin-left: 8px; line-height: 1; }
+
+  .card-img-wrap { position: relative; background: #e0e0e0; flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  #cardImg { width: 100%; height: 100%; object-fit: cover; display: none; }
+  .img-placeholder { color: #aaa; text-align: center; font-family: 'Barlow', sans-serif; font-size: 13px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .img-placeholder svg { width: 52px; height: 52px; }
+
+  .badge-wrap { position: absolute; top: 0; right: 0; width: 280px; height: 280px; overflow: hidden; pointer-events: none; }
+  .badge-inner { position: absolute; top: 0; right: -200px; width: 400px; text-align: center; font-family: 'Barlow Condensed', sans-serif; font-size: 32px; font-weight: 900; color: white; letter-spacing: .07em; transform: rotate(45deg); transform-origin: 50% 50%; padding: 16px 0; text-transform: uppercase; }
+
+  .card-stats { display: flex; align-items: stretch; border-top: 3px solid #ddd; }
+  .stat { flex: 1; display: flex; align-items: center; gap: 11px; padding: 14px 16px; border-right: 2px solid #ddd; background: #f9f9f9; }
+  .stat-ico { width: 28px; height: 28px; flex-shrink: 0; }
+  .stat-ico svg { width: 100%; height: 100%; }
+  .stat-val { font-size: 22px; font-weight: 900; color: #111; line-height: 1; }
+  .stat-lbl { font-size: 10px; color: #999; font-family: 'Barlow', sans-serif; text-transform: uppercase; letter-spacing: .08em; margin-top: 3px; }
+  .stat-tx { flex: 1.5; display: flex; align-items: center; padding: 14px 16px; gap: 11px; }
+  .stat-tx svg { width: 28px; height: 28px; flex-shrink: 0; }
+  .stat-tx-text { font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 800; color: white; text-transform: uppercase; letter-spacing: .04em; line-height: 1.2; }
+
+  .card-options { padding: 14px 20px 16px; background: white; border-top: 2px solid #eee; }
+  .opts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 20px; }
+  .opt-item { display: flex; align-items: center; gap: 10px; font-family: 'Barlow', sans-serif; font-size: 17px; font-weight: 600; color: #333; }
+  .opt-check { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: white; }
+  .opt-check svg { width: 12px; height: 12px; }
+
+  .card-footer { display: flex; align-items: center; justify-content: space-between; padding: 10px 20px; color: white; font-family: 'Barlow', sans-serif; }
+  .footer-phone { font-weight: 800; font-size: 17px; letter-spacing: .05em; }
+  .footer-lbl { font-size: 10px; opacity: .8; margin-bottom: 1px; }
+  .footer-addr { font-size: 13px; opacity: .9; font-weight: 500; }
+  .footer-right { display: flex; align-items: center; gap: 6px; }
+  .footer-right svg { width: 14px; height: 14px; opacity: .8; }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
 
 <header>
-<svg class=h-icon viewBox="0 0 24 24" fill=none stroke=currentColor stroke-width=2 stroke-linecap=round stroke-linejoin=round><rect x=1 y=3 width=15 height=13 rx=2 /><path d="M16 8h4l3 4v3h-7V8z"/><circle cx=5.5 cy=18.5 r=2.5 /><circle cx=18.5 cy=18.5 r=2.5 /></svg>
-<h1>Auto<span>Card</span> Studio</h1>
+  <svg class="h-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 4v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+  <h1>Auto<span>Card</span> Studio</h1>
 </header>
-<div class=workspace>
-<div class=panel>
-<div class=sec>
-<div class=sec-title>
-<svg viewBox="0 0 24 24" fill=none stroke=currentColor stroke-width=2 stroke-linecap=round stroke-linejoin=round><rect x=3 y=3 width=18 height=18 rx=2 /><circle cx=8.5 cy=8.5 r=1.5 /><polyline points="21 15 16 10 5 21"/></svg>
-Logo concessionnaire
-</div>
-<div class=upload-zone id=logoZone onclick='document.getElementById("logoInput").click()'>
-<svg viewBox="0 0 24 24" fill=none stroke=currentColor stroke-width=1.5 stroke-linecap=round stroke-linejoin=round><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
-<p>Importer logo (JPG, PNG, SVG)</p>
-</div>
-<input type=file id=logoInput accept=image/jpeg,image/png,image/svg+xml,image/webp style=display:none>
-<div class=logo-preview id=logoPreview>
-<img id=logoPreviewImg src="" alt=Logo>
-<button class=btn-sm onclick=clearLogo()>Supprimer</button>
-</div>
-<div class=saved-badge id=savedBadge>
-<svg viewBox="0 0 24 24" fill=none stroke=currentColor stroke-width=2.5 stroke-linecap=round stroke-linejoin=round><polyline points="20 6 9 17 4 12"/></svg>
-Sauvegardé localement
-</div>
-<label>Nom du garage</label>
-<input id=dealer value="Les Garages François" oninput=updateCard()>
-</div>
-<div class=sec>
-<div class=sec-title>
-<svg viewBox="0 0 24 24" fill=none stroke=currentColor stroke-width=2 stroke-linecap=round stroke-linejoin=round><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx=12 cy=13 r=4 /></svg>
-Photo du véhicule
-</div>
-<div class=upload-zone id=vehicleZone onclick='document.getElementById("vehicleInput").click()'>
-<svg viewBox="0 0 24 24" fill=none stroke=currentColor stroke-width=1.5 stroke-linecap=round stroke-linejoin=round><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
-<p>Cliquez ou déposez une image ici</p>
-</div>
-<input type=file id=vehicleInput accept=image/* style=display:none>
-<div class=vehicle-thumb id=vehicleThumb><img id=thumbImg src="" alt=""></div>
-</div>
-<div class=sec>
-<div class=sec-title>
-<svg viewBox="0 0 24 24" fill=none stroke=currentColor stroke-width=2 stroke-linecap=round stroke-linejoin=round><rect x=1 y=3 width=15 height=13 rx=2 /><path d="M16 8h4l3 4v3h-7V8z"/><circle cx=5.5 cy=18.5 r=2.5 /><circle cx=18.5 cy=18.5 r=2.5 /></svg>
-Informations véhicule
-</div>
-<label>Marque &amp; Modèle</label>
-<input id=brand value="CITROËN C5 AIRCROSS BLUEHDI" oninput=updateCard()>
-<label>Année</label>
-<input id=year value=2022 oninput=updateCard()>
-<label>Prix</label>
-<input id=price value="33.490 €" oninput=updateCard()>
-<label>Puissance</label>
-<input id=power value="131 ch" oninput=updateCard()>
-<label>Kilométrage</label>
-<input id=mileage value="19.900 km" oninput=updateCard()>
-<label>Boîte de vitesses</label>
-<textarea id=transmission oninput=updateCard()>BOITE AUTOMATIQUE
+
+<div class="workspace">
+<div class="panel">
+
+  <div class="sec">
+    <div class="sec-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      Logo concessionnaire
+    </div>
+    <div class="upload-zone" id="logoZone" onclick="document.getElementById('logoInput').click()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+      <p>Importer logo (JPG, PNG, SVG)</p>
+    </div>
+    <input type="file" id="logoInput" accept="image/jpeg,image/png,image/svg+xml,image/webp" style="display:none">
+    <div class="logo-preview" id="logoPreview">
+      <img id="logoPreviewImg" src="" alt="Logo">
+      <button class="btn-sm" onclick="clearLogo()">Supprimer</button>
+    </div>
+    <div class="saved-badge" id="savedBadge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      Sauvegardé localement
+    </div>
+    <label>Nom du garage</label>
+    <input type="text" id="dealer" value="Les Garages François" oninput="updateCard()">
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      Photo du véhicule
+    </div>
+    <div class="upload-zone" id="vehicleZone" onclick="document.getElementById('vehicleInput').click()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+      <p>Cliquez ou déposez une image ici</p>
+    </div>
+    <input type="file" id="vehicleInput" accept="image/*" style="display:none">
+    <div class="vehicle-thumb" id="vehicleThumb"><img id="thumbImg" src="" alt=""></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 4v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+      Informations véhicule
+    </div>
+    <label>Marque &amp; Modèle</label>
+    <input type="text" id="brand" value="CITROËN C5 AIRCROSS BLUEHDI" oninput="updateCard()">
+    <label>Année</label>
+    <input type="text" id="year" value="2022" oninput="updateCard()">
+    <label>Prix</label>
+    <input type="text" id="price" value="33.490 €" oninput="updateCard()">
+    <label>Puissance</label>
+    <input type="text" id="power" value="131 ch" oninput="updateCard()">
+    <label>Kilométrage</label>
+    <input type="text" id="mileage" value="19.900 km" oninput="updateCard()">
+    <label>Boîte de vitesses</label>
+    <textarea id="transmission" oninput="updateCard()">BOITE AUTOMATIQUE
 8 RAPPORTS</textarea>
-<label>Énergie</label>
-<div class=fuel-pills>
-<div class=fuel-pill data-fuel=diesel onclick='selectFuel("diesel")'>
-<svg viewBox="0 0 24 24" fill=none stroke=currentColor stroke-width=2 stroke-linecap=round stroke-linejoin=round><path d="M3 22V6a2 2 0 012-2h8a2 2 0 012 2v16M3 22h14M7 22V12h4v10"/><path d="M17 4h1a2 2 0 012 2v3.5a1.5 1.5 0 003 0V7l-2-3"/></svg>
-Diesel
+    <label>Énergie</label>
+    <div class="fuel-pills">
+      <div class="fuel-pill" data-fuel="diesel" onclick="selectFuel('diesel')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22V6a2 2 0 012-2h8a2 2 0 012 2v16M3 22h14M7 22V12h4v10"/><path d="M17 4h1a2 2 0 012 2v3.5a1.5 1.5 0 003 0V7l-2-3"/></svg>
+        Diesel
+      </div>
+      <div class="fuel-pill" data-fuel="essence" onclick="selectFuel('essence')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22V6a2 2 0 012-2h8a2 2 0 012 2v16M3 22h14M7 22V12h4v10"/><path d="M17 4h1a2 2 0 012 2v3.5a1.5 1.5 0 003 0V7l-2-3"/></svg>
+        Essence
+      </div>
+      <div class="fuel-pill" data-fuel="hybride" onclick="selectFuel('hybride')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        Hybride
+      </div>
+      <div class="fuel-pill" data-fuel="electrique" onclick="selectFuel('electrique')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        Électrique
+      </div>
+    </div>
+    <label>Badge ruban</label>
+    <input type="text" id="badge" value="D'occasion" oninput="updateCard()">
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Concessionnaire
+    </div>
+    <label>Téléphone</label>
+    <input type="text" id="phone" value="03 23 39 12 55" oninput="updateCard()">
+    <label>Adresse</label>
+    <input type="text" id="address" value="Route de Chauny 02700 Condren" oninput="updateCard()">
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+      Options du véhicule
+    </div>
+    <div class="options-list" id="optionsList"></div>
+    <button class="btn-add" onclick="addOption()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Ajouter une option
+    </button>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="17" cy="12" r="2.5"/><circle cx="13.5" cy="17.5" r="2.5"/><circle cx="6" cy="12" r="4"/></svg>
+      Couleurs
+    </div>
+
+    <div class="color-row">
+      <span class="clabel">Année</span>
+      <div class="cright">
+        <div class="presets">
+          <div class="preset" style="background:#ff0000" onclick="setColor('cYear','#ff0000')"></div>
+          <div class="preset" style="background:#005f9e" onclick="setColor('cYear','#005f9e')"></div>
+          <div class="preset" style="background:#1a1a1a" onclick="setColor('cYear','#1a1a1a')"></div>
+          <div class="preset" style="background:#27ae60" onclick="setColor('cYear','#27ae60')"></div>
+          <div class="preset" style="background:#e67e22" onclick="setColor('cYear','#e67e22')"></div>
+        </div>
+        <input type="color" id="cYear" value="#ff0000" oninput="updateCard()">
+      </div>
+    </div>
+
+    <div class="color-row">
+      <span class="clabel">Ruban badge</span>
+      <div class="cright">
+        <div class="presets">
+          <div class="preset" style="background:#ff0000" onclick="setColor('cBadge','#ff0000')"></div>
+          <div class="preset" style="background:#00b8a0" onclick="setColor('cBadge','#00b8a0')"></div>
+          <div class="preset" style="background:#1a1a1a" onclick="setColor('cBadge','#1a1a1a')"></div>
+          <div class="preset" style="background:#e67e22" onclick="setColor('cBadge','#e67e22')"></div>
+          <div class="preset" style="background:#8e44ad" onclick="setColor('cBadge','#8e44ad')"></div>
+        </div>
+        <input type="color" id="cBadge" value="#ff0000" oninput="updateCard()">
+      </div>
+    </div>
+
+    <div class="color-row">
+      <span class="clabel">Bloc boîte</span>
+      <div class="cright">
+        <div class="presets">
+          <div class="preset" style="background:#1a1a1a" onclick="setColor('cStats','#1a1a1a')"></div>
+          <div class="preset" style="background:#ff0000" onclick="setColor('cStats','#ff0000')"></div>
+          <div class="preset" style="background:#005f9e" onclick="setColor('cStats','#005f9e')"></div>
+          <div class="preset" style="background:#2c3e50" onclick="setColor('cStats','#2c3e50')"></div>
+          <div class="preset" style="background:#00b8a0" onclick="setColor('cStats','#00b8a0')"></div>
+        </div>
+        <input type="color" id="cStats" value="#1a1a1a" oninput="updateCard()">
+      </div>
+    </div>
+
+    <div class="color-row">
+      <span class="clabel">Options</span>
+      <div class="cright">
+        <div class="presets">
+          <div class="preset" style="background:#ff0000" onclick="setColor('cOptions','#ff0000')"></div>
+          <div class="preset" style="background:#00b8a0" onclick="setColor('cOptions','#00b8a0')"></div>
+          <div class="preset" style="background:#005f9e" onclick="setColor('cOptions','#005f9e')"></div>
+          <div class="preset" style="background:#1a1a1a" onclick="setColor('cOptions','#1a1a1a')"></div>
+          <div class="preset" style="background:#27ae60" onclick="setColor('cOptions','#27ae60')"></div>
+        </div>
+        <input type="color" id="cOptions" value="#ff0000" oninput="updateCard()">
+      </div>
+    </div>
+
+    <div class="color-row">
+      <span class="clabel">Pied de page</span>
+      <div class="cright">
+        <div class="presets">
+          <div class="preset" style="background:#ff0000" onclick="setColor('cFooter','#ff0000')"></div>
+          <div class="preset" style="background:#1a1a1a" onclick="setColor('cFooter','#1a1a1a')"></div>
+          <div class="preset" style="background:#005f9e" onclick="setColor('cFooter','#005f9e')"></div>
+          <div class="preset" style="background:#2c3e50" onclick="setColor('cFooter','#2c3e50')"></div>
+          <div class="preset" style="background:#00b8a0" onclick="setColor('cFooter','#00b8a0')"></div>
+        </div>
+        <input type="color" id="cFooter" value="#ff0000" oninput="updateCard()">
+      </div>
+    </div>
+
+    <div class="toggle-row" style="margin-top:8px">
+      <span class="clabel">Carte sombre</span>
+      <label class="toggle"><input type="checkbox" id="darkCard" onchange="updateCard()"><span class="tslider"></span></label>
+    </div>
+    <div class="toggle-row">
+      <span class="clabel">Afficher le badge</span>
+      <label class="toggle"><input type="checkbox" id="showBadge" checked onchange="updateCard()"><span class="tslider"></span></label>
+    </div>
+  </div>
+
+  <button class="btn-dl" id="dlBtn" onclick="downloadCard()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+    Télécharger en JPG
+  </button>
+
 </div>
-<div class=fuel-pill data-fuel=essence onclick='selectFuel("essence")'>
-<svg viewBox="0 0 24 24" fill=none stroke=currentColor stroke-width=2 stroke-linecap=round stroke-linejoin=round><path d="M3 22V6a2 2 0 012-2h8a2 2 0 012 2v16M3 22h14M7 22V12h4v10"/><path d="M17 4h1a2 2 0 012 2v3.5a1.5 1.5 0 003 0V7l-2-3"/></svg>
-Essence
-</div>
-<div class=fuel-pill data-fuel=hybride onclick='selectFuel("hybride")'>
-<svg viewBox="0 0 24 24" fill=none stroke=currentColor stroke-width=2 stroke-linecap=round stroke-linejoin=round><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-Hybride
-</div>
-<div class=fuel-pill data-fuel=electrique onclick='selectFuel("electrique")'>
-<svg viewBox="0 0 24 24" fill=none stroke=currentColor stroke-width=2 stroke-linecap=round stroke-linejoin=round><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-Électrique
-</div>
-</div>
-<label>Badge ruban</label>
-<input id=badge value="D'occasion" oninput=updateCard()>
-</div>
-<div class=sec>
-<div class=sec-title>
-<svg viewBox="0 0 24 24" fill=none stroke=currentColor stroke-width=2 stroke-linecap=round stroke-linejoin=round><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-Concessionnaire
-</div>
-<label>Téléphone</label>
-<input id=phone value="03 23 39 12 55" oninput=updateCard()>
-<label>Adresse</label>
-<input id=address value="Route de Chauny 02700 Condren" oninput=updateCard()>
-</div>
-<div class=sec>
-<div class=sec-title>
-<svg viewBox="0 0 24 24" fill=none stroke=currentColor stroke-width=2 stroke-linecap=round stroke-linejoin=round><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
-Options du véhicule
-</div>
-<div class=options-list id=optionsList></div>
-<button class=btn-add onclick=addOption()>
-<svg viewBox="0 0 24 24" fill=none stroke=currentColor stroke-width=2.5 stroke-linecap=round><line x1=12 y1=5 x2=12 y2=19 /><line x1=5 y1=12 x2=19 y2=12 /></svg>
-Ajouter une option
-</button>
-</div>
-<div class=sec>
-<div class=sec-title>
-<svg viewBox="0 0 24 24" fill=none stroke=currentColor stroke-width=2 stroke-linecap=round stroke-linejoin=round><circle cx=13.5 cy=6.5 r=2.5 /><circle cx=17 cy=12 r=2.5 /><circle cx=13.5 cy=17.5 r=2.5 /><circle cx=6 cy=12 r=4 /></svg>
-Couleurs
-</div>
-<div class=color-row>
-<span class=clabel>Année</span>
-<div class=cright>
-<div class=presets>
-<div class=preset style=background:red onclick='setColor("cYear","#ff0000")'></div>
-<div class=preset style=background:#005f9e onclick='setColor("cYear","#005f9e")'></div>
-<div class=preset style=background:#1a1a1a onclick='setColor("cYear","#1a1a1a")'></div>
-<div class=preset style=background:#27ae60 onclick='setColor("cYear","#27ae60")'></div>
-<div class=preset style=background:#e67e22 onclick='setColor("cYear","#e67e22")'></div>
-</div>
-<input type=color id=cYear value=#ff0000 oninput=updateCard()>
-</div>
-</div>
-<div class=color-row>
-<span class=clabel>Ruban badge</span>
-<div class=cright>
-<div class=presets>
-<div class=preset style=background:red onclick='setColor("cBadge","#ff0000")'></div>
-<div class=preset style=background:#00b8a0 onclick='setColor("cBadge","#00b8a0")'></div>
-<div class=preset style=background:#1a1a1a onclick='setColor("cBadge","#1a1a1a")'></div>
-<div class=preset style=background:#e67e22 onclick='setColor("cBadge","#e67e22")'></div>
-<div class=preset style=background:#8e44ad onclick='setColor("cBadge","#8e44ad")'></div>
-</div>
-<input type=color id=cBadge value=#ff0000 oninput=updateCard()>
-</div>
-</div>
-<div class=color-row>
-<span class=clabel>Bloc boîte</span>
-<div class=cright>
-<div class=presets>
-<div class=preset style=background:#1a1a1a onclick='setColor("cStats","#1a1a1a")'></div>
-<div class=preset style=background:red onclick='setColor("cStats","#ff0000")'></div>
-<div class=preset style=background:#005f9e onclick='setColor("cStats","#005f9e")'></div>
-<div class=preset style=background:#2c3e50 onclick='setColor("cStats","#2c3e50")'></div>
-<div class=preset style=background:#00b8a0 onclick='setColor("cStats","#00b8a0")'></div>
-</div>
-<input type=color id=cStats value=#1a1a1a oninput=updateCard()>
-</div>
-</div>
-<div class=color-row>
-<span class=clabel>Options</span>
-<div class=cright>
-<div class=presets>
-<div class=preset style=background:red onclick='setColor("cOptions","#ff0000")'></div>
-<div class=preset style=background:#00b8a0 onclick='setColor("cOptions","#00b8a0")'></div>
-<div class=preset style=background:#005f9e onclick='setColor("cOptions","#005f9e")'></div>
-<div class=preset style=background:#1a1a1a onclick='setColor("cOptions","#1a1a1a")'></div>
-<div class=preset style=background:#27ae60 onclick='setColor("cOptions","#27ae60")'></div>
-</div>
-<input type=color id=cOptions value=#ff0000 oninput=updateCard()>
-</div>
-</div>
-<div class=color-row>
-<span class=clabel>Pied de page</span>
-<div class=cright>
-<div class=presets>
-<div class=preset style=background:red onclick='setColor("cFooter","#ff0000")'></div>
-<div class=preset style=background:#1a1a1a onclick='setColor("cFooter","#1a1a1a")'></div>
-<div class=preset style=background:#005f9e onclick='setColor("cFooter","#005f9e")'></div>
-<div class=preset style=background:#2c3e50 onclick='setColor("cFooter","#2c3e50")'></div>
-<div class=preset style=background:#00b8a0 onclick='setColor("cFooter","#00b8a0")'></div>
-</div>
-<input type=color id=cFooter value=#ff0000 oninput=updateCard()>
-</div>
-</div>
-<div class=toggle-row style=margin-top:8px>
-<span class=clabel>Carte sombre</span>
-<label class=toggle><input type=checkbox id=darkCard onchange=updateCard()><span class=tslider></span></label>
-</div>
-<div class=toggle-row>
-<span class=clabel>Afficher le badge</span>
-<label class=toggle><input type=checkbox id=showBadge checked onchange=updateCard()><span class=tslider></span></label>
-</div>
-</div>
-<button class=btn-dl id=dlBtn onclick=downloadCard()>
-<svg viewBox="0 0 24 24" fill=none stroke=currentColor stroke-width=2.5 stroke-linecap=round stroke-linejoin=round><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-Télécharger en JPG
-</button>
-</div>
-<div class=preview-area>
-<div id=card>
-<div class=card-header id=cHeader>
-<div class=logo-area>
-<div id=cLogoDefault>
-<svg viewBox="0 0 60 60" width=40 height=40><circle cx=30 cy=30 r=27 fill=none stroke=#ccc stroke-width=2 /><path d="M10 27Q20 15 30 22Q40 15 50 27" fill=none stroke=#bbb stroke-width=2.5 stroke-linecap=round /><path d="M10 33Q20 21 30 28Q40 21 50 33" fill=none stroke=#bbb stroke-width=2.5 stroke-linecap=round /></svg>
-</div>
-<img id=cLogoImg src="" alt=Logo>
-<div class=dealer-name id=cDealer>Les Garages François</div>
-</div>
-<div class=card-title-area>
-<span class=card-brand id=cBrand>CITROËN C5 AIRCROSS BLUEHDI</span>
-<span class=card-year id=cYear style=color:red>2022</span>
-</div>
-</div>
-<div class=card-img-wrap>
-<div class=img-placeholder id=cImgPlaceholder>
-<svg viewBox="0 0 24 24" fill=none stroke=#ccc stroke-width=1 stroke-linecap=round stroke-linejoin=round><rect x=3 y=3 width=18 height=18 rx=2 /><circle cx=8.5 cy=8.5 r=1.5 /><polyline points="21 15 16 10 5 21"/></svg>
-<span>Importez une photo du véhicule</span>
-</div>
-<img id=cardImg src="" alt=vehicle>
-<div class=badge-wrap id=cBadgeWrap>
-<div class=badge-inner id=cBadgeInner style=background:red>D'occasion</div>
-</div>
-</div>
-<div class=card-stats>
-<div class=stat>
-<div class=stat-ico><svg viewBox="0 0 24 24" fill=none stroke=#555 stroke-width=1.8 stroke-linecap=round stroke-linejoin=round><line x1=12 y1=1 x2=12 y2=23 /><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
-<div><div class=stat-val id=cPrice>33.490 €</div><div class=stat-lbl>Prix</div></div>
-</div>
-<div class=stat>
-<div class=stat-ico><svg viewBox="0 0 24 24" fill=none stroke=#555 stroke-width=1.8 stroke-linecap=round stroke-linejoin=round><circle cx=12 cy=12 r=3 /><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M12 2v2M12 20v2M4.93 19.07l1.41-1.41M19.07 19.07l-1.41-1.41M2 12h2M20 12h2"/></svg></div>
-<div><div class=stat-val id=cPower>131 ch</div><div class=stat-lbl>Puissance</div></div>
-</div>
-<div class=stat>
-<div class=stat-ico><svg viewBox="0 0 24 24" fill=none stroke=#555 stroke-width=1.8 stroke-linecap=round stroke-linejoin=round><path d="M12 22s-8-4.5-8-11.8A8 8 0 0112 2a8 8 0 018 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx=12 cy=10 r=3 /></svg></div>
-<div><div class=stat-val id=cMileage>19.900 km</div><div class=stat-lbl>Kilométrage</div></div>
-</div>
-<div class=stat id=cFuelStat style=flex:0.9>
-<div class=stat-ico id=cFuelIco>
-<svg viewBox="0 0 24 24" fill=none stroke=#555 stroke-width=1.8 stroke-linecap=round stroke-linejoin=round><path d="M3 22V6a2 2 0 012-2h8a2 2 0 012 2v16M3 22h14M7 22V12h4v10"/><path d="M17 4h1a2 2 0 012 2v3.5a1.5 1.5 0 003 0V7l-2-3"/></svg>
-</div>
-<div><div class=stat-val id=cFuelLabel style=font-size:16px>Diesel</div><div class=stat-lbl>Énergie</div></div>
-</div>
-<div class=stat-tx id=cTxWrap style=background:#1a1a1a>
-<svg viewBox="0 0 24 24" fill=none stroke=white stroke-width=1.8 stroke-linecap=round style=width:22px;height:22px;flex-shrink:0><circle cx=12 cy=12 r=3 /><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
-<div class=stat-tx-text id=cTx>BOITE AUTOMATIQUE<br>8 RAPPORTS</div>
-</div>
-</div>
-<div class=card-options id=cOptsSection>
-<div class=opts-header id=cOptsHeader style=background:red>
-<svg viewBox="0 0 24 24" fill=none stroke=white stroke-width=2.5 stroke-linecap=round stroke-linejoin=round><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
-OPTIONS
-</div>
-<div class=opts-grid id=cOptsGrid></div>
-</div>
-<div class=card-footer id=cFooter style=background:red>
-<div>
-<div class=footer-lbl>Plus d'info au</div>
-<div class=footer-phone id=cPhone>03 23 39 12 55</div>
-</div>
-<div class=footer-right>
-<svg viewBox="0 0 24 24" fill=none stroke=white stroke-width=2 stroke-linecap=round stroke-linejoin=round><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx=12 cy=10 r=3 /></svg>
-<div class=footer-addr id=cAddress>Route de Chauny 02700 Condren</div>
+
+<div class="preview-area">
+<div id="card">
+
+  <div class="card-header" id="cHeader">
+    <div class="logo-area">
+      <div id="cLogoDefault">
+        <svg viewBox="0 0 60 60" width="40" height="40"><circle cx="30" cy="30" r="27" fill="none" stroke="#ccc" stroke-width="2"/><path d="M10 27Q20 15 30 22Q40 15 50 27" fill="none" stroke="#bbb" stroke-width="2.5" stroke-linecap="round"/><path d="M10 33Q20 21 30 28Q40 21 50 33" fill="none" stroke="#bbb" stroke-width="2.5" stroke-linecap="round"/></svg>
+      </div>
+      <img id="cLogoImg" src="" alt="Logo">
+      <div class="dealer-name" id="cDealer">Les Garages François</div>
+    </div>
+    <div class="card-title-area">
+      <span class="card-brand" id="cBrand">CITROËN C5 AIRCROSS BLUEHDI</span>
+      <span class="card-year" id="cYear" style="color:#ff0000">2022</span>
+    </div>
+  </div>
+
+  <div class="card-img-wrap">
+    <div class="img-placeholder" id="cImgPlaceholder">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      <span>Importez une photo du véhicule</span>
+    </div>
+    <img id="cardImg" src="" alt="vehicle">
+    <div class="badge-wrap" id="cBadgeWrap">
+      <div class="badge-inner" id="cBadgeInner" style="background:#ff0000">D'occasion</div>
+    </div>
+  </div>
+
+  <div class="card-stats">
+    <div class="stat">
+      <div class="stat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+      <div><div class="stat-val" id="cPrice">33.490 €</div><div class="stat-lbl">Prix</div></div>
+    </div>
+    <div class="stat">
+      <div class="stat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M12 2v2M12 20v2M4.93 19.07l1.41-1.41M19.07 19.07l-1.41-1.41M2 12h2M20 12h2"/></svg></div>
+      <div><div class="stat-val" id="cPower">131 ch</div><div class="stat-lbl">Puissance</div></div>
+    </div>
+    <div class="stat">
+      <div class="stat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0112 2a8 8 0 018 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg></div>
+      <div><div class="stat-val" id="cMileage">19.900 km</div><div class="stat-lbl">Kilométrage</div></div>
+    </div>
+    <div class="stat" id="cFuelStat" style="flex:0.9">
+      <div class="stat-ico" id="cFuelIco">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22V6a2 2 0 012-2h8a2 2 0 012 2v16M3 22h14M7 22V12h4v10"/><path d="M17 4h1a2 2 0 012 2v3.5a1.5 1.5 0 003 0V7l-2-3"/></svg>
+      </div>
+      <div><div class="stat-val" id="cFuelLabel" style="font-size:16px">Diesel</div><div class="stat-lbl">Énergie</div></div>
+    </div>
+    <div class="stat-tx" id="cTxWrap" style="background:#1a1a1a">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" style="width:22px;height:22px;flex-shrink:0"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+      <div class="stat-tx-text" id="cTx">BOITE AUTOMATIQUE<br>8 RAPPORTS</div>
+    </div>
+  </div>
+
+  <div class="card-options" id="cOptsSection">
+    <div class="opts-grid" id="cOptsGrid"></div>
+  </div>
+
+  <div class="card-footer" id="cFooter" style="background:#ff0000">
+    <div>
+      <div class="footer-lbl">Plus d'info au</div>
+      <div class="footer-phone" id="cPhone">03 23 39 12 55</div>
+    </div>
+    <div class="footer-right">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <div class="footer-addr" id="cAddress">Route de Chauny 02700 Condren</div>
+    </div>
+  </div>
+
 </div>
 </div>
 </div>
-</div>
-</div>
+
 <script>
-let currentFuel="diesel";const FUELS={diesel:{label:"Diesel",icoStroke:"#555",svg:'<svg viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22V6a2 2 0 012-2h8a2 2 0 012 2v16M3 22h14M7 22V12h4v10"/><path d="M17 4h1a2 2 0 012 2v3.5a1.5 1.5 0 003 0V7l-2-3"/></svg>'},essence:{label:"Essence",svg:'<svg viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22V6a2 2 0 012-2h8a2 2 0 012 2v16M3 22h14M7 22V12h4v10"/><path d="M17 4h1a2 2 0 012 2v3.5a1.5 1.5 0 003 0V7l-2-3"/></svg>'},hybride:{label:"Hybride",svg:'<svg viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>'},electrique:{label:"\xc9lectrique",svg:'<svg viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>'}},DEFAULTS=["Limiteur et r\xe9gulateur","Ordinateur de bord","Kit mains libres Bluetooth","Cam\xe9ra de recul"];function init(){loadLogo(),DEFAULTS.forEach(e=>addOption(e)),selectFuel("diesel"),updateCard()}function selectFuel(e){currentFuel=e,document.querySelectorAll(".fuel-pill").forEach(t=>t.classList.toggle("active",t.dataset.fuel===e)),document.getElementById("cFuelLabel").textContent=FUELS[e].label,document.getElementById("cFuelIco").innerHTML=FUELS[e].svg}function applyLogo(e){let t=document.getElementById("cLogoImg");t.src=e,t.style.display="block",document.getElementById("cLogoDefault").style.display="none",document.getElementById("logoPreviewImg").src=e,document.getElementById("logoPreview").classList.add("on")}function saveLogo(e){try{localStorage.setItem("acs_logo",e),showSaved()}catch(t){}}function clearLogo(){document.getElementById("cLogoImg").style.display="none",document.getElementById("cLogoDefault").style.display="flex",document.getElementById("logoPreview").classList.remove("on"),document.getElementById("logoInput").value="";try{localStorage.removeItem("acs_logo")}catch(e){}}function loadLogo(){try{let e=localStorage.getItem("acs_logo");e&&applyLogo(e)}catch(t){}}function showSaved(){let e=document.getElementById("savedBadge");e.classList.add("on"),setTimeout(()=>e.classList.remove("on"),3e3)}function setupDrop(e,t){let l=document.getElementById(e);l.addEventListener("dragover",e=>{e.preventDefault(),l.style.borderColor="#ff0000"}),l.addEventListener("dragleave",()=>{l.style.borderColor=""}),l.addEventListener("drop",e=>{e.preventDefault(),l.style.borderColor="";let o=e.dataTransfer.files[0];if(o&&o.type.startsWith("image/")){let n=new FileReader;n.onload=e=>t(e.target.result),n.readAsDataURL(o)}})}function addOption(e=""){let t=document.getElementById("optionsList"),l=document.createElement("div");l.className="option-row",l.innerHTML=`<input type="text" placeholder="Ex: GPS int\xe9gr\xe9" value="${e}" oninput="updateCard()">
-    <button class="btn-del" onclick="this.parentElement.remove();updateCard()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`,t.appendChild(l),updateCard()}function setColor(e,t){document.getElementById(e).value=t,updateCard()}function updateCard(){var e,t,l,o,n,a,r,d,s,i,c,g,u,p,y,v;let _=e=>document.getElementById(e);_("cBrand").textContent=_("brand").value,_("cYear").textContent=_("year").value,_("cYear").style.color=_("cYear").value,_("cPrice").textContent=_("price").value,_("cPower").textContent=_("power").value,_("cMileage").textContent=_("mileage").value,_("cTx").innerHTML=(0,_("transmission").value).replace(/\n/g,"<br>"),_("cTxWrap").style.background=_("cStats").value,_("cBadgeInner").textContent=_("badge").value,_("cBadgeInner").style.background=_("cBadge").value,_("cBadgeWrap").style.display=_("showBadge").checked?"":"none",_("cDealer").textContent=_("dealer").value,_("cPhone").textContent=_("phone").value,_("cAddress").textContent=_("address").value,_("cFooter").style.background=_("cFooter").value,_("cOptsHeader").style.background=_("cOptions").value;let h=_("darkCard").checked;_("card").style.background=h?"#1a1a22":"#fff",_("cHeader").style.background=h?"#0f0f13":"#f2f2f2",_("cHeader").style.borderColor=h?"#333":"#ddd",_("cOptsSection").style.background=h?"#1a1a22":"#fff",_("cBrand").style.color=h?"#fff":"#111",document.querySelectorAll(".stat").forEach(e=>{e.style.background=h?"#1a1a22":"#f9f9f9",e.style.borderColor=h?"#333":"#ddd";let t=e.querySelector(".stat-val");t&&(t.style.color=h?"#fff":"#111")}),document.querySelectorAll(".opt-item").forEach(e=>e.style.color=h?"#ddd":"#333");let f=document.querySelectorAll('#optionsList .option-row input[type="text"]'),$=_("cOptsGrid");$.innerHTML="";let m=_("cOptions").value;f.forEach(e=>{if(!e.value.trim())return;let t=document.createElement("div");t.className="opt-item",t.innerHTML=`<span class="opt-check" style="background:${m}"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span>${e.value}</span>`,$.appendChild(t)})}async function downloadCard(){let e=document.getElementById("dlBtn");e.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;animation:spin 1s linear infinite"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" opacity=".3"/><path d="M21 12a9 9 0 00-9-9"/></svg> G\xe9n\xe9ration…`,e.disabled=!0;try{let t=await html2canvas(document.getElementById("card"),{scale:2,useCORS:!0,allowTaint:!0,backgroundColor:"#ffffff",logging:!1}),l=document.createElement("a");l.download="annonce-vehicule.jpg",l.href=t.toDataURL("image/jpeg",.95),l.click()}catch(o){alert("Erreur lors de la g\xe9n\xe9ration."),console.error(o)}e.disabled=!1,e.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:16px;height:16px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> T\xe9l\xe9charger en JPG`}document.getElementById("logoInput").addEventListener("change",function(e){let t=e.target.files[0];if(!t)return;let l=new FileReader;l.onload=e=>{applyLogo(e.target.result),saveLogo(e.target.result)},l.readAsDataURL(t)}),setupDrop("logoZone",e=>{applyLogo(e),saveLogo(e)}),setupDrop("vehicleZone",e=>{document.getElementById("thumbImg").src=e,document.getElementById("vehicleThumb").style.display="block",document.getElementById("cardImg").src=e,document.getElementById("cardImg").style.display="block",document.getElementById("cImgPlaceholder").style.display="none"}),document.getElementById("vehicleInput").addEventListener("change",function(e){let t=e.target.files[0];if(!t)return;let l=new FileReader;l.onload=e=>{let t=e.target.result;document.getElementById("thumbImg").src=t,document.getElementById("vehicleThumb").style.display="block",document.getElementById("cardImg").src=t,document.getElementById("cardImg").style.display="block",document.getElementById("cImgPlaceholder").style.display="none"},l.readAsDataURL(t)}),init();
+let currentFuel = 'diesel';
+
+const FUELS = {
+  diesel:     { label: 'Diesel',      icoStroke: '#555',
+    svg: '<svg viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22V6a2 2 0 012-2h8a2 2 0 012 2v16M3 22h14M7 22V12h4v10"/><path d="M17 4h1a2 2 0 012 2v3.5a1.5 1.5 0 003 0V7l-2-3"/></svg>' },
+  essence:    { label: 'Essence',
+    svg: '<svg viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22V6a2 2 0 012-2h8a2 2 0 012 2v16M3 22h14M7 22V12h4v10"/><path d="M17 4h1a2 2 0 012 2v3.5a1.5 1.5 0 003 0V7l-2-3"/></svg>' },
+  hybride:    { label: 'Hybride',
+    svg: '<svg viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>' },
+  electrique: { label: 'Électrique',
+    svg: '<svg viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>' },
+};
+
+const DEFAULTS = ['Limiteur et régulateur','Ordinateur de bord','Kit mains libres Bluetooth','Caméra de recul'];
+
+function init() {
+  loadLogo();
+  DEFAULTS.forEach(o => addOption(o));
+  selectFuel('diesel');
+  updateCard();
+}
+
+function selectFuel(f) {
+  currentFuel = f;
+  document.querySelectorAll('.fuel-pill').forEach(p => p.classList.toggle('active', p.dataset.fuel === f));
+  document.getElementById('cFuelLabel').textContent = FUELS[f].label;
+  document.getElementById('cFuelIco').innerHTML = FUELS[f].svg;
+}
+
+document.getElementById('logoInput').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const r = new FileReader();
+  r.onload = ev => { applyLogo(ev.target.result); saveLogo(ev.target.result); };
+  r.readAsDataURL(file);
+});
+
+function applyLogo(src) {
+  const img = document.getElementById('cLogoImg');
+  img.src = src; img.style.display = 'block';
+  document.getElementById('cLogoDefault').style.display = 'none';
+  document.getElementById('logoPreviewImg').src = src;
+  document.getElementById('logoPreview').classList.add('on');
+}
+
+function saveLogo(src) {
+  try { localStorage.setItem('acs_logo', src); showSaved(); } catch(e) {}
+}
+
+function clearLogo() {
+  document.getElementById('cLogoImg').style.display = 'none';
+  document.getElementById('cLogoDefault').style.display = 'flex';
+  document.getElementById('logoPreview').classList.remove('on');
+  document.getElementById('logoInput').value = '';
+  try { localStorage.removeItem('acs_logo'); } catch(e) {}
+}
+
+function loadLogo() {
+  try { const s = localStorage.getItem('acs_logo'); if (s) applyLogo(s); } catch(e) {}
+}
+
+function showSaved() {
+  const b = document.getElementById('savedBadge');
+  b.classList.add('on');
+  setTimeout(() => b.classList.remove('on'), 3000);
+}
+
+function setupDrop(zoneId, cb) {
+  const z = document.getElementById(zoneId);
+  z.addEventListener('dragover', e => { e.preventDefault(); z.style.borderColor = '#ff0000'; });
+  z.addEventListener('dragleave', () => { z.style.borderColor = ''; });
+  z.addEventListener('drop', e => {
+    e.preventDefault(); z.style.borderColor = '';
+    const f = e.dataTransfer.files[0];
+    if (f && f.type.startsWith('image/')) { const r = new FileReader(); r.onload = ev => cb(ev.target.result); r.readAsDataURL(f); }
+  });
+}
+setupDrop('logoZone', src => { applyLogo(src); saveLogo(src); });
+setupDrop('vehicleZone', src => {
+  document.getElementById('thumbImg').src = src;
+  document.getElementById('vehicleThumb').style.display = 'block';
+  document.getElementById('cardImg').src = src;
+  document.getElementById('cardImg').style.display = 'block';
+  document.getElementById('cImgPlaceholder').style.display = 'none';
+});
+
+document.getElementById('vehicleInput').addEventListener('change', function(e) {
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = ev => {
+    const src = ev.target.result;
+    document.getElementById('thumbImg').src = src;
+    document.getElementById('vehicleThumb').style.display = 'block';
+    document.getElementById('cardImg').src = src;
+    document.getElementById('cardImg').style.display = 'block';
+    document.getElementById('cImgPlaceholder').style.display = 'none';
+  };
+  r.readAsDataURL(f);
+});
+
+function addOption(val = '') {
+  const list = document.getElementById('optionsList');
+  const count = list.querySelectorAll('.option-row').length;
+  if (count >= 4) return;
+  const row = document.createElement('div');
+  row.className = 'option-row';
+  row.innerHTML = `<input type="text" placeholder="Ex: GPS intégré" value="${val}" oninput="updateCard()">
+    <button class="btn-del" onclick="this.parentElement.remove();updateCard()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`;
+  list.appendChild(row);
+  updateCard();
+}
+
+function setColor(id, val) { document.getElementById(id).value = val; updateCard(); }
+
+function updateCard() {
+  const g = id => document.getElementById(id);
+  const v = id => g(id).value;
+
+  g('cBrand').textContent    = v('brand');
+  g('cYear').textContent     = v('year');
+  g('cYear').style.color     = v('cYear');
+  g('cPrice').textContent    = v('price');
+  g('cPower').textContent    = v('power');
+  g('cMileage').textContent  = v('mileage');
+  g('cTx').innerHTML         = v('transmission').replace(/\n/g,'<br>');
+  g('cTxWrap').style.background   = v('cStats');
+  g('cBadgeInner').textContent    = v('badge');
+  g('cBadgeInner').style.background = v('cBadge');
+  g('cBadgeWrap').style.display   = g('showBadge').checked ? '' : 'none';
+  g('cDealer').textContent   = v('dealer');
+  g('cPhone').textContent    = v('phone');
+  g('cAddress').textContent  = v('address');
+  g('cFooter').style.background   = v('cFooter');
+
+  const dark = g('darkCard').checked;
+  g('card').style.background    = dark ? '#1a1a22' : '#fff';
+  g('cHeader').style.background = dark ? '#0f0f13' : '#f2f2f2';
+  g('cHeader').style.borderColor= dark ? '#333' : '#ddd';
+  g('cOptsSection').style.background = dark ? '#1a1a22' : '#fff';
+  g('cBrand').style.color       = dark ? '#fff' : '#111';
+  document.querySelectorAll('.stat').forEach(s => {
+    s.style.background = dark ? '#1a1a22' : '#f9f9f9';
+    s.style.borderColor = dark ? '#333' : '#ddd';
+    const sv = s.querySelector('.stat-val');
+    if (sv) sv.style.color = dark ? '#fff' : '#111';
+  });
+  document.querySelectorAll('.opt-item').forEach(o => o.style.color = dark ? '#ddd' : '#333');
+
+  const inputs = document.querySelectorAll('#optionsList .option-row input[type="text"]');
+  const grid = g('cOptsGrid');
+  grid.innerHTML = '';
+  const c = v('cOptions');
+  inputs.forEach(inp => {
+    if (!inp.value.trim()) return;
+    const item = document.createElement('div');
+    item.className = 'opt-item';
+    item.innerHTML = `<span class="opt-check" style="background:${c}"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span>${inp.value}</span>`;
+    grid.appendChild(item);
+  });
+  const addBtn = document.querySelector('.btn-add');
+  if (addBtn) addBtn.style.display = inputs.length >= 4 ? 'none' : 'flex';
+}
+
+async function downloadCard() {
+  const btn = document.getElementById('dlBtn');
+  btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;animation:spin 1s linear infinite"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" opacity=".3"/><path d="M21 12a9 9 0 00-9-9"/></svg> Génération…`;
+  btn.disabled = true;
+  try {
+    const canvas = await html2canvas(document.getElementById('card'), { scale:2, useCORS:true, allowTaint:true, backgroundColor:'#ffffff', logging:false });
+    const a = document.createElement('a');
+    a.download = 'annonce-vehicule.jpg';
+    a.href = canvas.toDataURL('image/jpeg', 0.95);
+    a.click();
+  } catch(e) { alert('Erreur lors de la génération.'); console.error(e); }
+  btn.disabled = false;
+  btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:16px;height:16px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Télécharger en JPG`;
+}
+
+init();
 </script>
 </body>
 </html>
