@@ -6,150 +6,18 @@
 <title>AutoCard Studio</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #0f0f13;
-    --surface: #1a1a22;
-    --border: #2e2e3e;
-    --accent: #ff0000;
-    --text: #e8e8f0;
-    --muted: #7070a0;
-    --radius: 12px;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--text); font-family: 'Barlow', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
-  header { padding: 16px 28px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; background: #13131a; }
-  header h1 { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 20px; letter-spacing: .08em; text-transform: uppercase; }
-  header h1 span { color: var(--accent); }
-  .h-icon { width: 26px; height: 26px; color: var(--accent); flex-shrink: 0; }
-  .workspace { display: flex; flex: 1; overflow: hidden; }
-
-  .panel { width: 340px; min-width: 340px; background: var(--surface); border-right: 1px solid var(--border); overflow-y: auto; padding: 18px 15px 40px; display: flex; flex-direction: column; gap: 20px; }
-  .panel::-webkit-scrollbar { width: 4px; }
-  .panel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-
-  .sec-title { display: flex; align-items: center; gap: 7px; font-family: 'Barlow Condensed', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--accent); margin-bottom: 11px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
-  .sec-title svg { width: 12px; height: 12px; flex-shrink: 0; }
-
-  label { display: block; font-size: 11px; font-weight: 600; color: var(--muted); margin-bottom: 4px; margin-top: 9px; text-transform: uppercase; letter-spacing: .1em; }
-
-  input[type="text"], textarea, select { width: 100%; background: #0f0f13; border: 1px solid var(--border); border-radius: 8px; color: var(--text); padding: 8px 10px; font-family: 'Barlow', sans-serif; font-size: 13px; outline: none; transition: border-color .2s; appearance: none; }
-  input[type="text"]:focus, textarea:focus, select:focus { border-color: var(--accent); }
-  textarea { resize: vertical; min-height: 50px; line-height: 1.5; }
-  select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237070a0' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px; cursor: pointer; }
-
-  .fuel-pills { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 5px; }
-  .fuel-pill { display: flex; align-items: center; gap: 5px; padding: 6px 11px; border-radius: 20px; border: 1.5px solid var(--border); background: #0f0f13; color: var(--muted); font-size: 12px; font-weight: 600; cursor: pointer; transition: all .18s; user-select: none; }
-  .fuel-pill svg { width: 13px; height: 13px; flex-shrink: 0; }
-  .fuel-pill:hover { border-color: var(--accent); color: var(--text); }
-  .fuel-pill.active { background: var(--accent); border-color: var(--accent); color: #fff; }
-
-  .upload-zone { border: 2px dashed var(--border); border-radius: 10px; padding: 18px; text-align: center; cursor: pointer; transition: border-color .2s, background .2s; background: #0f0f13; }
-  .upload-zone:hover { border-color: var(--accent); background: #130a0a; }
-  .upload-zone svg { width: 26px; height: 26px; color: var(--accent); }
-  .upload-zone p { font-size: 12px; color: var(--muted); margin-top: 5px; }
-  .logo-preview { display: none; margin-top: 9px; background: #0f0f13; border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; align-items: center; justify-content: space-between; gap: 8px; }
-  .logo-preview.on { display: flex; }
-  .logo-preview img { height: 34px; max-width: 110px; object-fit: contain; }
-  .btn-sm { background: none; border: 1px solid #44444f; color: var(--muted); border-radius: 6px; padding: 4px 9px; cursor: pointer; font-size: 12px; transition: all .2s; }
-  .btn-sm:hover { border-color: #ff4d4d; color: #ff4d4d; }
-  .saved-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; color: #4caf50; margin-top: 5px; opacity: 0; transition: opacity .4s; }
-  .saved-badge svg { width: 11px; height: 11px; }
-  .saved-badge.on { opacity: 1; }
-  .vehicle-thumb { margin-top: 9px; border-radius: 8px; overflow: hidden; display: none; }
-  .vehicle-thumb img { width: 100%; display: block; max-height: 100px; object-fit: cover; }
-
-  .options-list { display: flex; flex-direction: column; gap: 5px; }
-  .option-row { display: flex; gap: 5px; align-items: center; }
-  .option-row input { flex: 1; }
-  .btn-del { background: none; border: 1px solid #44444f; color: var(--muted); border-radius: 6px; padding: 5px 8px; cursor: pointer; transition: all .2s; display: flex; align-items: center; }
-  .btn-del svg { width: 12px; height: 12px; }
-  .btn-del:hover { border-color: #ff4d4d; color: #ff4d4d; }
-  .btn-add { margin-top: 7px; width: 100%; background: none; border: 1px dashed var(--border); color: var(--muted); border-radius: 8px; padding: 7px; cursor: pointer; font-size: 12px; transition: all .2s; display: flex; align-items: center; justify-content: center; gap: 5px; }
-  .btn-add svg { width: 13px; height: 13px; }
-  .btn-add:hover { border-color: var(--accent); color: var(--accent); }
-
-  .color-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 0; border-bottom: 1px solid #1f1f2a; }
-  .color-row:last-of-type { border-bottom: none; }
-  .clabel { font-size: 12px; font-weight: 500; color: var(--text); }
-  .cright { display: flex; align-items: center; gap: 5px; }
-  .presets { display: flex; gap: 4px; }
-  .preset { width: 19px; height: 19px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: transform .15s, border-color .15s; flex-shrink: 0; }
-  .preset:hover { transform: scale(1.3); border-color: rgba(255,255,255,.4); }
-  input[type="color"] { width: 32px; height: 26px; border: 1px solid var(--border); border-radius: 5px; background: none; cursor: pointer; padding: 2px; }
-  .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; }
-  .toggle { position: relative; display: inline-block; width: 36px; height: 20px; }
-  .toggle input { opacity: 0; width: 0; height: 0; }
-  .tslider { position: absolute; cursor: pointer; inset: 0; background: var(--border); transition: .3s; border-radius: 20px; }
-  .tslider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background: white; transition: .3s; border-radius: 50%; }
-  .toggle input:checked + .tslider { background: var(--accent); }
-  .toggle input:checked + .tslider:before { transform: translateX(16px); }
-
-  .btn-dl { width: 100%; padding: 13px; background: var(--accent); border: none; border-radius: var(--radius); color: #fff; font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; cursor: pointer; transition: opacity .2s, transform .1s; display: flex; align-items: center; justify-content: center; gap: 7px; }
-  .btn-dl svg { width: 16px; height: 16px; }
-  .btn-dl:hover { opacity: .88; transform: translateY(-1px); }
-  .btn-dl:disabled { opacity: .5; cursor: not-allowed; transform: none; }
-
-  .preview-area { flex: 1; display: flex; align-items: center; justify-content: center; padding: 36px; background: repeating-conic-gradient(#1a1a22 0% 25%, #0f0f13 0% 50%) 0 0/20px 20px; overflow: auto; }
-
-  #card { width: 800px; height: 800px; background: #fff; font-family: 'Barlow Condensed', sans-serif; box-shadow: 0 40px 120px rgba(0,0,0,.6); position: relative; overflow: hidden; flex-shrink: 0; display: flex; flex-direction: column; }
-  .card-header { background: #f2f2f2; padding: 12px 18px 10px; display: flex; align-items: center; gap: 12px; border-bottom: 3px solid #ddd; }
-  .logo-area { display: flex; align-items: center; gap: 10px; }
-  #cLogoImg { height: 44px; max-width: 130px; object-fit: contain; display: none; }
-  #cLogoDefault { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; }
-  .dealer-name { font-size: 10px; font-weight: 600; color: #888; font-family: 'Barlow', sans-serif; text-transform: uppercase; letter-spacing: .1em; }
-  .card-title-area { flex: 1; text-align: right; }
-  .card-brand { font-family: 'Barlow Condensed', sans-serif; font-size: 30px; font-weight: 900; letter-spacing: .03em; text-transform: uppercase; color: #111; line-height: 1; }
-  .card-year { font-size: 30px; font-weight: 900; margin-left: 8px; line-height: 1; }
-
-  .card-img-wrap { position: relative; background: #e0e0e0; flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-  #cardImg { width: 100%; height: 100%; object-fit: cover; display: none; }
-  .img-placeholder { color: #aaa; text-align: center; font-family: 'Barlow', sans-serif; font-size: 13px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
-  .img-placeholder svg { width: 52px; height: 52px; }
-
-  .badge-wrap { position: absolute; top: 0; right: 0; width: 280px; height: 280px; overflow: hidden; pointer-events: none; }
-  .badge-inner { position: absolute; top: 0; right: -200px; width: 400px; text-align: center; font-family: 'Barlow Condensed', sans-serif; font-size: 32px; font-weight: 900; color: white; letter-spacing: .07em; transform: rotate(45deg); transform-origin: 50% 50%; padding: 16px 0; text-transform: uppercase; }
-
-  .card-stats { display: flex; align-items: stretch; border-top: 3px solid #ddd; }
-  .stat { flex: 1; display: flex; align-items: center; gap: 11px; padding: 14px 16px; border-right: 2px solid #ddd; background: #f9f9f9; }
-  .stat-ico { width: 28px; height: 28px; flex-shrink: 0; }
-  .stat-ico svg { width: 100%; height: 100%; }
-  .stat-val { font-size: 22px; font-weight: 900; color: #111; line-height: 1; }
-  .stat-lbl { font-size: 10px; color: #999; font-family: 'Barlow', sans-serif; text-transform: uppercase; letter-spacing: .08em; margin-top: 3px; }
-  .stat-tx { flex: 1.5; display: flex; align-items: center; padding: 14px 16px; gap: 11px; }
-  .stat-tx svg { width: 28px; height: 28px; flex-shrink: 0; }
-  .stat-tx-text { font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 800; color: white; text-transform: uppercase; letter-spacing: .04em; line-height: 1.2; }
-
-  .card-options { padding: 14px 20px 16px; background: white; border-top: 2px solid #eee; }
-  .opts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 20px; }
-  .opt-item { display: flex; align-items: center; gap: 10px; font-family: 'Barlow', sans-serif; font-size: 17px; font-weight: 600; color: #333; }
-  .opt-check { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: white; }
-  .opt-check svg { width: 12px; height: 12px; }
-
-  .card-footer { display: flex; align-items: center; justify-content: space-between; padding: 10px 20px; color: white; font-family: 'Barlow', sans-serif; }
-  .footer-phone { font-weight: 800; font-size: 17px; letter-spacing: .05em; }
-  .footer-lbl { font-size: 10px; opacity: .8; margin-bottom: 1px; }
-  .footer-addr { font-size: 13px; opacity: .9; font-weight: 500; }
-  .footer-right { display: flex; align-items: center; gap: 6px; }
-  .footer-right svg { width: 14px; height: 14px; opacity: .8; }
-
-  @keyframes spin { to { transform: rotate(360deg); } }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-
 <header>
   <svg class="h-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 4v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
   <h1>Auto<span>Card</span> Studio</h1>
 </header>
-
 <div class="workspace">
 <div class="panel">
-
   <div class="sec">
     <div class="sec-title">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-      Logo concessionnaire
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Logo concessionnaire
     </div>
     <div class="upload-zone" id="logoZone" onclick="document.getElementById('logoInput').click()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
@@ -161,17 +29,14 @@
       <button class="btn-sm" onclick="clearLogo()">Supprimer</button>
     </div>
     <div class="saved-badge" id="savedBadge">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-      Sauvegardé localement
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Sauvegardé localement
     </div>
     <label>Nom du garage</label>
     <input type="text" id="dealer" value="Les Garages François" oninput="updateCard()">
   </div>
-
   <div class="sec">
     <div class="sec-title">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
-      Photo du véhicule
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>Photo du véhicule
     </div>
     <div class="upload-zone" id="vehicleZone" onclick="document.getElementById('vehicleInput').click()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
@@ -180,7 +45,6 @@
     <input type="file" id="vehicleInput" accept="image/*" style="display:none">
     <div class="vehicle-thumb" id="vehicleThumb"><img id="thumbImg" src="" alt=""></div>
   </div>
-
   <div class="sec">
     <div class="sec-title">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 4v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
@@ -195,62 +59,50 @@
     <label>Puissance</label>
     <input type="text" id="power" value="131 ch" oninput="updateCard()">
     <label>Kilométrage</label>
-    <input type="text" id="mileage" value="19.900 km" oninput="updateCard()">
+    <input type="text" id="mileage" value="19.900" oninput="updateCard()">
     <label>Boîte de vitesses</label>
-    <textarea id="transmission" oninput="updateCard()">BOITE AUTOMATIQUE
-8 RAPPORTS</textarea>
+    <textarea id="transmission" oninput="updateCard()">AUTOMATIQUE
+      8 RAPPORTS</textarea>
     <label>Énergie</label>
     <div class="fuel-pills">
       <div class="fuel-pill" data-fuel="diesel" onclick="selectFuel('diesel')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22V6a2 2 0 012-2h8a2 2 0 012 2v16M3 22h14M7 22V12h4v10"/><path d="M17 4h1a2 2 0 012 2v3.5a1.5 1.5 0 003 0V7l-2-3"/></svg>
-        Diesel
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22V6a2 2 0 012-2h8a2 2 0 012 2v16M3 22h14M7 22V12h4v10"/><path d="M17 4h1a2 2 0 012 2v3.5a1.5 1.5 0 003 0V7l-2-3"/></svg>Diesel
       </div>
       <div class="fuel-pill" data-fuel="essence" onclick="selectFuel('essence')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22V6a2 2 0 012-2h8a2 2 0 012 2v16M3 22h14M7 22V12h4v10"/><path d="M17 4h1a2 2 0 012 2v3.5a1.5 1.5 0 003 0V7l-2-3"/></svg>
-        Essence
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22V6a2 2 0 012-2h8a2 2 0 012 2v16M3 22h14M7 22V12h4v10"/><path d="M17 4h1a2 2 0 012 2v3.5a1.5 1.5 0 003 0V7l-2-3"/></svg>Essence
       </div>
       <div class="fuel-pill" data-fuel="hybride" onclick="selectFuel('hybride')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-        Hybride
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Hybride
       </div>
       <div class="fuel-pill" data-fuel="electrique" onclick="selectFuel('electrique')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-        Électrique
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Électrique
       </div>
     </div>
     <label>Badge ruban</label>
     <input type="text" id="badge" value="D'occasion" oninput="updateCard()">
   </div>
-
   <div class="sec">
     <div class="sec-title">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      Concessionnaire
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Concessionnaire
     </div>
     <label>Téléphone</label>
     <input type="text" id="phone" value="03 23 39 12 55" oninput="updateCard()">
     <label>Adresse</label>
     <input type="text" id="address" value="Route de Chauny 02700 Condren" oninput="updateCard()">
   </div>
-
   <div class="sec">
     <div class="sec-title">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
-      Options du véhicule
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Options du véhicule
     </div>
     <div class="options-list" id="optionsList"></div>
     <button class="btn-add" onclick="addOption()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-      Ajouter une option
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Ajouter une option
     </button>
   </div>
-
   <div class="sec">
     <div class="sec-title">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="17" cy="12" r="2.5"/><circle cx="13.5" cy="17.5" r="2.5"/><circle cx="6" cy="12" r="4"/></svg>
-      Couleurs
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="17" cy="12" r="2.5"/><circle cx="13.5" cy="17.5" r="2.5"/><circle cx="6" cy="12" r="4"/></svg>Couleurs
     </div>
-
     <div class="color-row">
       <span class="clabel">Année</span>
       <div class="cright">
@@ -264,7 +116,6 @@
         <input type="color" id="cYear" value="#ff0000" oninput="updateCard()">
       </div>
     </div>
-
     <div class="color-row">
       <span class="clabel">Ruban badge</span>
       <div class="cright">
@@ -278,7 +129,6 @@
         <input type="color" id="cBadge" value="#ff0000" oninput="updateCard()">
       </div>
     </div>
-
     <div class="color-row">
       <span class="clabel">Bloc boîte</span>
       <div class="cright">
@@ -292,7 +142,6 @@
         <input type="color" id="cStats" value="#1a1a1a" oninput="updateCard()">
       </div>
     </div>
-
     <div class="color-row">
       <span class="clabel">Options</span>
       <div class="cright">
@@ -306,7 +155,6 @@
         <input type="color" id="cOptions" value="#ff0000" oninput="updateCard()">
       </div>
     </div>
-
     <div class="color-row">
       <span class="clabel">Pied de page</span>
       <div class="cright">
@@ -320,7 +168,6 @@
         <input type="color" id="cFooter" value="#ff0000" oninput="updateCard()">
       </div>
     </div>
-
     <div class="toggle-row" style="margin-top:8px">
       <span class="clabel">Carte sombre</span>
       <label class="toggle"><input type="checkbox" id="darkCard" onchange="updateCard()"><span class="tslider"></span></label>
@@ -330,17 +177,12 @@
       <label class="toggle"><input type="checkbox" id="showBadge" checked onchange="updateCard()"><span class="tslider"></span></label>
     </div>
   </div>
-
   <button class="btn-dl" id="dlBtn" onclick="downloadCard()">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-    Télécharger en JPG
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Télécharger en JPG
   </button>
-
 </div>
-
 <div class="preview-area">
 <div id="card">
-
   <div class="card-header" id="cHeader">
     <div class="logo-area">
       <div id="cLogoDefault">
@@ -354,7 +196,6 @@
       <span class="card-year" id="cYear" style="color:#ff0000">2022</span>
     </div>
   </div>
-
   <div class="card-img-wrap">
     <div class="img-placeholder" id="cImgPlaceholder">
       <svg viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
@@ -365,19 +206,18 @@
       <div class="badge-inner" id="cBadgeInner" style="background:#ff0000">D'occasion</div>
     </div>
   </div>
-
   <div class="card-stats">
     <div class="stat">
-      <div class="stat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+      <div class="stat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></div>
       <div><div class="stat-val" id="cPrice">33.490 €</div><div class="stat-lbl">Prix</div></div>
     </div>
     <div class="stat">
-      <div class="stat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M12 2v2M12 20v2M4.93 19.07l1.41-1.41M19.07 19.07l-1.41-1.41M2 12h2M20 12h2"/></svg></div>
+      <div class="stat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 11-6.32 17.77"/><path d="M12 6v2M6 12H4M8.46 8.46L7.05 7.05M12 12l3-4"/><circle cx="12" cy="12" r="1" fill="#555"/></svg></div>
       <div><div class="stat-val" id="cPower">131 ch</div><div class="stat-lbl">Puissance</div></div>
     </div>
     <div class="stat">
       <div class="stat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0112 2a8 8 0 018 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg></div>
-      <div><div class="stat-val" id="cMileage">19.900 km</div><div class="stat-lbl">Kilométrage</div></div>
+      <div><div class="stat-val" id="cMileage">19.900</div><div class="stat-lbl">Kilométrage</div></div>
     </div>
     <div class="stat" id="cFuelStat" style="flex:0.9">
       <div class="stat-ico" id="cFuelIco">
@@ -390,11 +230,9 @@
       <div class="stat-tx-text" id="cTx">BOITE AUTOMATIQUE<br>8 RAPPORTS</div>
     </div>
   </div>
-
   <div class="card-options" id="cOptsSection">
     <div class="opts-grid" id="cOptsGrid"></div>
   </div>
-
   <div class="card-footer" id="cFooter" style="background:#ff0000">
     <div>
       <div class="footer-lbl">Plus d'info au</div>
@@ -405,191 +243,9 @@
       <div class="footer-addr" id="cAddress">Route de Chauny 02700 Condren</div>
     </div>
   </div>
-
 </div>
 </div>
 </div>
-
-<script>
-let currentFuel = 'diesel';
-
-const FUELS = {
-  diesel:     { label: 'Diesel',      icoStroke: '#555',
-    svg: '<svg viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22V6a2 2 0 012-2h8a2 2 0 012 2v16M3 22h14M7 22V12h4v10"/><path d="M17 4h1a2 2 0 012 2v3.5a1.5 1.5 0 003 0V7l-2-3"/></svg>' },
-  essence:    { label: 'Essence',
-    svg: '<svg viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22V6a2 2 0 012-2h8a2 2 0 012 2v16M3 22h14M7 22V12h4v10"/><path d="M17 4h1a2 2 0 012 2v3.5a1.5 1.5 0 003 0V7l-2-3"/></svg>' },
-  hybride:    { label: 'Hybride',
-    svg: '<svg viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>' },
-  electrique: { label: 'Électrique',
-    svg: '<svg viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>' },
-};
-
-const DEFAULTS = ['Limiteur et régulateur','Ordinateur de bord','Kit mains libres Bluetooth','Caméra de recul'];
-
-function init() {
-  loadLogo();
-  DEFAULTS.forEach(o => addOption(o));
-  selectFuel('diesel');
-  updateCard();
-}
-
-function selectFuel(f) {
-  currentFuel = f;
-  document.querySelectorAll('.fuel-pill').forEach(p => p.classList.toggle('active', p.dataset.fuel === f));
-  document.getElementById('cFuelLabel').textContent = FUELS[f].label;
-  document.getElementById('cFuelIco').innerHTML = FUELS[f].svg;
-}
-
-document.getElementById('logoInput').addEventListener('change', function(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const r = new FileReader();
-  r.onload = ev => { applyLogo(ev.target.result); saveLogo(ev.target.result); };
-  r.readAsDataURL(file);
-});
-
-function applyLogo(src) {
-  const img = document.getElementById('cLogoImg');
-  img.src = src; img.style.display = 'block';
-  document.getElementById('cLogoDefault').style.display = 'none';
-  document.getElementById('logoPreviewImg').src = src;
-  document.getElementById('logoPreview').classList.add('on');
-}
-
-function saveLogo(src) {
-  try { localStorage.setItem('acs_logo', src); showSaved(); } catch(e) {}
-}
-
-function clearLogo() {
-  document.getElementById('cLogoImg').style.display = 'none';
-  document.getElementById('cLogoDefault').style.display = 'flex';
-  document.getElementById('logoPreview').classList.remove('on');
-  document.getElementById('logoInput').value = '';
-  try { localStorage.removeItem('acs_logo'); } catch(e) {}
-}
-
-function loadLogo() {
-  try { const s = localStorage.getItem('acs_logo'); if (s) applyLogo(s); } catch(e) {}
-}
-
-function showSaved() {
-  const b = document.getElementById('savedBadge');
-  b.classList.add('on');
-  setTimeout(() => b.classList.remove('on'), 3000);
-}
-
-function setupDrop(zoneId, cb) {
-  const z = document.getElementById(zoneId);
-  z.addEventListener('dragover', e => { e.preventDefault(); z.style.borderColor = '#ff0000'; });
-  z.addEventListener('dragleave', () => { z.style.borderColor = ''; });
-  z.addEventListener('drop', e => {
-    e.preventDefault(); z.style.borderColor = '';
-    const f = e.dataTransfer.files[0];
-    if (f && f.type.startsWith('image/')) { const r = new FileReader(); r.onload = ev => cb(ev.target.result); r.readAsDataURL(f); }
-  });
-}
-setupDrop('logoZone', src => { applyLogo(src); saveLogo(src); });
-setupDrop('vehicleZone', src => {
-  document.getElementById('thumbImg').src = src;
-  document.getElementById('vehicleThumb').style.display = 'block';
-  document.getElementById('cardImg').src = src;
-  document.getElementById('cardImg').style.display = 'block';
-  document.getElementById('cImgPlaceholder').style.display = 'none';
-});
-
-document.getElementById('vehicleInput').addEventListener('change', function(e) {
-  const f = e.target.files[0]; if (!f) return;
-  const r = new FileReader();
-  r.onload = ev => {
-    const src = ev.target.result;
-    document.getElementById('thumbImg').src = src;
-    document.getElementById('vehicleThumb').style.display = 'block';
-    document.getElementById('cardImg').src = src;
-    document.getElementById('cardImg').style.display = 'block';
-    document.getElementById('cImgPlaceholder').style.display = 'none';
-  };
-  r.readAsDataURL(f);
-});
-
-function addOption(val = '') {
-  const list = document.getElementById('optionsList');
-  const count = list.querySelectorAll('.option-row').length;
-  if (count >= 4) return;
-  const row = document.createElement('div');
-  row.className = 'option-row';
-  row.innerHTML = `<input type="text" placeholder="Ex: GPS intégré" value="${val}" oninput="updateCard()">
-    <button class="btn-del" onclick="this.parentElement.remove();updateCard()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`;
-  list.appendChild(row);
-  updateCard();
-}
-
-function setColor(id, val) { document.getElementById(id).value = val; updateCard(); }
-
-function updateCard() {
-  const g = id => document.getElementById(id);
-  const v = id => g(id).value;
-
-  g('cBrand').textContent    = v('brand');
-  g('cYear').textContent     = v('year');
-  g('cYear').style.color     = v('cYear');
-  g('cPrice').textContent    = v('price');
-  g('cPower').textContent    = v('power');
-  g('cMileage').textContent  = v('mileage');
-  g('cTx').innerHTML         = v('transmission').replace(/\n/g,'<br>');
-  g('cTxWrap').style.background   = v('cStats');
-  g('cBadgeInner').textContent    = v('badge');
-  g('cBadgeInner').style.background = v('cBadge');
-  g('cBadgeWrap').style.display   = g('showBadge').checked ? '' : 'none';
-  g('cDealer').textContent   = v('dealer');
-  g('cPhone').textContent    = v('phone');
-  g('cAddress').textContent  = v('address');
-  g('cFooter').style.background   = v('cFooter');
-
-  const dark = g('darkCard').checked;
-  g('card').style.background    = dark ? '#1a1a22' : '#fff';
-  g('cHeader').style.background = dark ? '#0f0f13' : '#f2f2f2';
-  g('cHeader').style.borderColor= dark ? '#333' : '#ddd';
-  g('cOptsSection').style.background = dark ? '#1a1a22' : '#fff';
-  g('cBrand').style.color       = dark ? '#fff' : '#111';
-  document.querySelectorAll('.stat').forEach(s => {
-    s.style.background = dark ? '#1a1a22' : '#f9f9f9';
-    s.style.borderColor = dark ? '#333' : '#ddd';
-    const sv = s.querySelector('.stat-val');
-    if (sv) sv.style.color = dark ? '#fff' : '#111';
-  });
-  document.querySelectorAll('.opt-item').forEach(o => o.style.color = dark ? '#ddd' : '#333');
-
-  const inputs = document.querySelectorAll('#optionsList .option-row input[type="text"]');
-  const grid = g('cOptsGrid');
-  grid.innerHTML = '';
-  const c = v('cOptions');
-  inputs.forEach(inp => {
-    if (!inp.value.trim()) return;
-    const item = document.createElement('div');
-    item.className = 'opt-item';
-    item.innerHTML = `<span class="opt-check" style="background:${c}"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span>${inp.value}</span>`;
-    grid.appendChild(item);
-  });
-  const addBtn = document.querySelector('.btn-add');
-  if (addBtn) addBtn.style.display = inputs.length >= 4 ? 'none' : 'flex';
-}
-
-async function downloadCard() {
-  const btn = document.getElementById('dlBtn');
-  btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;animation:spin 1s linear infinite"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" opacity=".3"/><path d="M21 12a9 9 0 00-9-9"/></svg> Génération…`;
-  btn.disabled = true;
-  try {
-    const canvas = await html2canvas(document.getElementById('card'), { scale:2, useCORS:true, allowTaint:true, backgroundColor:'#ffffff', logging:false });
-    const a = document.createElement('a');
-    a.download = 'annonce-vehicule.jpg';
-    a.href = canvas.toDataURL('image/jpeg', 0.95);
-    a.click();
-  } catch(e) { alert('Erreur lors de la génération.'); console.error(e); }
-  btn.disabled = false;
-  btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:16px;height:16px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Télécharger en JPG`;
-}
-
-init();
-</script>
+<script src="script.js"></script>
 </body>
 </html>
