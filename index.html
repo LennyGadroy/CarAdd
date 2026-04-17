@@ -2,19 +2,51 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AutoCard Studio</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>CarAdd Studio</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.2/Sortable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Montserrat:wght@400;600;700;800;900&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header>
   <svg class="h-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 4v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-  <h1>Auto<span>Card</span> Studio</h1>
+  <h1>Car<span>Add</span> Studio</h1>
+  <button class="mobile-menu-btn" onclick="togglePanel()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    Éditer
+  </button>
 </header>
+<div class="panel-backdrop" id="panelBackdrop" onclick="togglePanel()"></div>
 <div class="workspace">
-<div class="panel">
+<div class="panel" id="panel">
+  <div class="sec">
+    <div class="sec-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+      Format de la carte
+    </div>
+    <div class="pills-row">
+      <div class="pill format-pill active" data-format="square" onclick="selectFormat('square')"><span class="fmt-ico">⬛</span>Carré 1:1</div>
+      <div class="pill format-pill" data-format="story" onclick="selectFormat('story')"><span class="fmt-ico">📱</span>Story 9:16</div>
+      <div class="pill format-pill" data-format="landscape" onclick="selectFormat('landscape')"><span class="fmt-ico">🖥</span>Paysage 16:9</div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+      Typographie
+    </div>
+    <div class="pills-row">
+      <div class="pill font-pill active" data-font="sport" onclick="selectFont('sport')">Sport</div>
+      <!-- <div class="pill font-pill" data-font="luxe" onclick="selectFont('luxe')">Luxe</div>
+      <div class="pill font-pill" data-font="modern" onclick="selectFont('modern')">Modern</div> -->
+      <div class="pill font-pill" data-font="compact" onclick="selectFont('compact')">Compact</div>
+    </div>
+  </div>
   <div class="sec">
     <div class="sec-title">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Logo concessionnaire
@@ -29,21 +61,28 @@
       <button class="btn-sm" onclick="clearLogo()">Supprimer</button>
     </div>
     <div class="saved-badge" id="savedBadge">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Sauvegardé localement
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Sauvegardé
     </div>
     <label>Nom du garage</label>
-    <input type="text" id="dealer" value="Les Garages François" oninput="updateCard()">
+    <input type="text" id="dealer" value="Nom du garage" oninput="updateCard();saveSettings()">
   </div>
   <div class="sec">
     <div class="sec-title">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>Photo du véhicule
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      Photo du véhicule
     </div>
     <div class="upload-zone" id="vehicleZone" onclick="document.getElementById('vehicleInput').click()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
       <p>Cliquez ou déposez une image ici</p>
     </div>
     <input type="file" id="vehicleInput" accept="image/*" style="display:none">
-    <div class="vehicle-thumb" id="vehicleThumb"><img id="thumbImg" src="" alt=""></div>
+    <div class="vehicle-thumb" id="vehicleThumb">
+      <img id="thumbImg" src="" alt="">
+      <button class="crop-btn" onclick="openCropModal()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2v14a2 2 0 002 2h14M18 22V8a2 2 0 00-2-2H2"/></svg>
+        Recadrer
+      </button>
+    </div>
   </div>
   <div class="sec">
     <div class="sec-title">
@@ -51,44 +90,120 @@
       Informations véhicule
     </div>
     <label>Marque &amp; Modèle</label>
-    <input type="text" id="brand" value="CITROËN C5 AIRCROSS BLUEHDI" oninput="updateCard()">
+    <input type="text" id="brand" value="NOM du véhicule" oninput="updateCard()">
     <label>Année</label>
-    <input type="text" id="year" value="2022" oninput="updateCard()">
-    <label>Prix</label>
-    <input type="text" id="price" value="33.490 €" oninput="updateCard()">
+    <input type="text" id="year" value="année" oninput="updateCard()">
     <label>Puissance</label>
-    <input type="text" id="power" value="131 ch" oninput="updateCard()">
-    <label>Kilométrage</label>
-    <input type="text" id="mileage" value="19.900" oninput="updateCard()">
+    <input type="text" id="power" value="xxx ch" oninput="updateCard()">
+    <label>Kilométrage (km)</label>
+    <input type="text" id="mileage" value="xx.xxx" oninput="updateCard()">
     <label>Boîte de vitesses</label>
-    <textarea id="transmission" oninput="updateCard()">AUTOMATIQUE
-      8 RAPPORTS</textarea>
+    <textarea id="transmission" oninput="updateCard()">AUTOMATIQUE 8 RAPPORTS</textarea>
     <label>Énergie</label>
-    <div class="fuel-pills">
-      <div class="fuel-pill" data-fuel="diesel" onclick="selectFuel('diesel')">
+    <div class="pills-row">
+      <div class="pill fuel-pill" data-fuel="diesel" onclick="selectFuel('diesel')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22V6a2 2 0 012-2h8a2 2 0 012 2v16M3 22h14M7 22V12h4v10"/><path d="M17 4h1a2 2 0 012 2v3.5a1.5 1.5 0 003 0V7l-2-3"/></svg>Diesel
       </div>
-      <div class="fuel-pill" data-fuel="essence" onclick="selectFuel('essence')">
+      <div class="pill fuel-pill" data-fuel="essence" onclick="selectFuel('essence')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22V6a2 2 0 012-2h8a2 2 0 012 2v16M3 22h14M7 22V12h4v10"/><path d="M17 4h1a2 2 0 012 2v3.5a1.5 1.5 0 003 0V7l-2-3"/></svg>Essence
       </div>
-      <div class="fuel-pill" data-fuel="hybride" onclick="selectFuel('hybride')">
+      <div class="pill fuel-pill" data-fuel="hybride" onclick="selectFuel('hybride')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Hybride
       </div>
-      <div class="fuel-pill" data-fuel="electrique" onclick="selectFuel('electrique')">
+      <div class="pill fuel-pill" data-fuel="electrique" onclick="selectFuel('electrique')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Électrique
       </div>
     </div>
-    <label>Badge ruban</label>
-    <input type="text" id="badge" value="D'occasion" oninput="updateCard()">
+    <label>Crit'Air</label>
+    <div class="critair-swatches">
+      <div class="critair-swatch" data-critair="none" style="background:#444;font-size:10px" onclick="selectCritair('none')">–</div>
+      <div class="critair-swatch active" data-critair="E" style="background:#4caf50" onclick="selectCritair('E')">E</div>
+      <div class="critair-swatch" data-critair="1" style="background:#8e44ad" onclick="selectCritair('1')">1</div>
+      <div class="critair-swatch" data-critair="2" style="background:#c9a800" onclick="selectCritair('2')">2</div>
+      <div class="critair-swatch" data-critair="3" style="background:#e67e22" onclick="selectCritair('3')">3</div>
+      <div class="critair-swatch" data-critair="4" style="background:#c0392b" onclick="selectCritair('4')">4</div>
+      <div class="critair-swatch" data-critair="5" style="background:#7f8c8d" onclick="selectCritair('5')">5</div>
+    </div>
+    <label>Émissions CO₂ (g/km) <span style="font-weight:400;text-transform:none">— optionnel</span></label>
+    <input type="text" id="co2" value="" placeholder="Ex: 118 g/km" oninput="updateCard()">
   </div>
   <div class="sec">
     <div class="sec-title">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Concessionnaire
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+      Prix &amp; Financement
+    </div>
+    <label>Prix affiché</label>
+    <input type="text" id="price" value="xx.xxx €" oninput="updateCard()">
+    <div class="toggle-row" style="margin-top:10px">
+      <span class="clabel">Afficher le financement LOA/LLD</span>
+      <label class="toggle"><input type="checkbox" id="showFin" onchange="updateCard()"><span class="tslider"></span></label>
+    </div>
+    <div id="finFields" style="display:none">
+      <label>Mensualité</label>
+      <input type="text" id="finAmount" value="À partir de 399 €/mois" oninput="updateCard()">
+      <label>Mentions légales</label>
+      <input type="text" id="finLegal" value="Sous réserve d'acceptation. Apport 3 000€. Durée 48 mois." oninput="updateCard()">
+      <label>Couleur bandeau financement</label>
+      <div class="cright" style="margin-top:5px">
+        <div class="presets">
+          <div class="preset" style="background:#1a1a1a" onclick="setColor('cFin','#1a1a1a')"></div>
+          <div class="preset" style="background:#005f9e" onclick="setColor('cFin','#005f9e')"></div>
+          <div class="preset" style="background:#27ae60" onclick="setColor('cFin','#27ae60')"></div>
+          <div class="preset" style="background:#8e44ad" onclick="setColor('cFin','#8e44ad')"></div>
+          <div class="preset" style="background:#e67e22" onclick="setColor('cFin','#e67e22')"></div>
+        </div>
+        <input type="color" id="cFin" value="#1a1a1a" oninput="updateCard()">
+      </div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>Badges &amp; Overlays
+    </div>
+    <div class="toggle-row">
+      <span class="clabel">Afficher le ruban</span>
+      <label class="toggle"><input type="checkbox" id="showBadge" checked onchange="updateCard()"><span class="tslider"></span></label>
+    </div>
+    <label>Texte du ruban</label>
+    <input type="text" id="badge" value="D'occasion" oninput="updateCard()">
+    <label>Badge de garantie</label>
+    <select id="garantieBadge" onchange="updateCard()">
+      <option value="">— Aucun —</option>
+      <option value="Garantie 12 mois">Garantie 12 mois</option>
+      <option value="Garantie 24 mois">Garantie 24 mois</option>
+      <option value="Première main">Première main</option>
+      <option value="Entretien à jour">Entretien à jour</option>
+      <option value="Certifié constructeur">Certifié constructeur</option>
+      <option value="custom">Personnalisé…</option>
+    </select>
+    <div id="garantieCustomWrap" style="display:none">
+      <input type="text" id="garantieCustom" placeholder="Votre texte" oninput="updateCard()" style="margin-top:5px">
+    </div>
+    <label>Statut commercial (overlay photo)</label>
+    <div class="overlay-btns">
+      <button class="overlay-btn" data-overlay="vendu" onclick="setOverlay('vendu')">VENDU</button>
+      <button class="overlay-btn" data-overlay="nouveau_prix" onclick="setOverlay('nouveau_prix')">NOUVEAU PRIX</button>
+      <button class="overlay-btn" data-overlay="arrivage" onclick="setOverlay('arrivage')">ARRIVAGE</button>
+      <button class="overlay-btn" data-overlay="promo" onclick="setOverlay('promo')">PROMO</button>
+    </div>
+    <p class="subtext">Cliquez une 2e fois pour désactiver</p>
+  </div>
+  <div class="sec">
+    <div class="sec-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="3" height="3"/><path d="M17 14h.01M20 14v3M20 20h-3M17 20v.01M20 17h.01"/></svg>Annonce &amp; QR Code
+    </div>
+    <label>URL de l'annonce</label>
+    <input type="text" id="annonceUrl" placeholder="https://www.leboncoin.fr/voitures/…" oninput="updateQRCode()">
+    <p class="subtext">Un QR code sera automatiquement généré dans le pied de page de la carte.</p>
+  </div>
+  <div class="sec">
+    <div class="sec-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>Concessionnaire
     </div>
     <label>Téléphone</label>
-    <input type="text" id="phone" value="03 23 39 12 55" oninput="updateCard()">
+    <input type="text" id="phone" value="03 XX XX XX XX" oninput="updateCard();saveSettings()">
     <label>Adresse</label>
-    <input type="text" id="address" value="Route de Chauny 02700 Condren" oninput="updateCard()">
+    <input type="text" id="address" value="Adresse de la concessionnaire" oninput="updateCard();saveSettings()">
   </div>
   <div class="sec">
     <div class="sec-title">
@@ -101,7 +216,7 @@
   </div>
   <div class="sec">
     <div class="sec-title">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="17" cy="12" r="2.5"/><circle cx="13.5" cy="17.5" r="2.5"/><circle cx="6" cy="12" r="4"/></svg>Couleurs
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="17" cy="12" r="2.5"/><circle cx="13.5" cy="17.5" r="2.5"/><circle cx="6" cy="12" r="4"/></svg>Couleurs &amp; Apparence
     </div>
     <div class="color-row">
       <span class="clabel">Année</span>
@@ -113,7 +228,7 @@
           <div class="preset" style="background:#27ae60" onclick="setColor('cYear','#27ae60')"></div>
           <div class="preset" style="background:#e67e22" onclick="setColor('cYear','#e67e22')"></div>
         </div>
-        <input type="color" id="cYear" value="#ff0000" oninput="updateCard()">
+        <input type="color" id="cYear" value="#ff0000" oninput="updateCard();saveSettings()">
       </div>
     </div>
     <div class="color-row">
@@ -121,12 +236,12 @@
       <div class="cright">
         <div class="presets">
           <div class="preset" style="background:#ff0000" onclick="setColor('cBadge','#ff0000')"></div>
-          <div class="preset" style="background:#00b8a0" onclick="setColor('cBadge','#00b8a0')"></div>
           <div class="preset" style="background:#1a1a1a" onclick="setColor('cBadge','#1a1a1a')"></div>
-          <div class="preset" style="background:#e67e22" onclick="setColor('cBadge','#e67e22')"></div>
+          <div class="preset" style="background:#005f9e" onclick="setColor('cBadge','#005f9e')"></div>
+          <div class="preset" style="background:#27ae60" onclick="setColor('cBadge','#27ae60')"></div>
           <div class="preset" style="background:#8e44ad" onclick="setColor('cBadge','#8e44ad')"></div>
         </div>
-        <input type="color" id="cBadge" value="#ff0000" oninput="updateCard()">
+        <input type="color" id="cBadge" value="#ff0000" oninput="updateCard();saveSettings()">
       </div>
     </div>
     <div class="color-row">
@@ -139,11 +254,11 @@
           <div class="preset" style="background:#2c3e50" onclick="setColor('cStats','#2c3e50')"></div>
           <div class="preset" style="background:#00b8a0" onclick="setColor('cStats','#00b8a0')"></div>
         </div>
-        <input type="color" id="cStats" value="#1a1a1a" oninput="updateCard()">
+        <input type="color" id="cStats" value="#1a1a1a" oninput="updateCard();saveSettings()">
       </div>
     </div>
     <div class="color-row">
-      <span class="clabel">Options</span>
+      <span class="clabel">Options ✓</span>
       <div class="cright">
         <div class="presets">
           <div class="preset" style="background:#ff0000" onclick="setColor('cOptions','#ff0000')"></div>
@@ -152,7 +267,7 @@
           <div class="preset" style="background:#1a1a1a" onclick="setColor('cOptions','#1a1a1a')"></div>
           <div class="preset" style="background:#27ae60" onclick="setColor('cOptions','#27ae60')"></div>
         </div>
-        <input type="color" id="cOptions" value="#ff0000" oninput="updateCard()">
+        <input type="color" id="cOptions" value="#ff0000" oninput="updateCard();saveSettings()">
       </div>
     </div>
     <div class="color-row">
@@ -165,86 +280,130 @@
           <div class="preset" style="background:#2c3e50" onclick="setColor('cFooter','#2c3e50')"></div>
           <div class="preset" style="background:#00b8a0" onclick="setColor('cFooter','#00b8a0')"></div>
         </div>
-        <input type="color" id="cFooter" value="#ff0000" oninput="updateCard()">
+        <input type="color" id="cFooter" value="#ff0000" oninput="updateCard();saveSettings()">
       </div>
     </div>
     <div class="toggle-row" style="margin-top:8px">
       <span class="clabel">Carte sombre</span>
-      <label class="toggle"><input type="checkbox" id="darkCard" onchange="updateCard()"><span class="tslider"></span></label>
-    </div>
-    <div class="toggle-row">
-      <span class="clabel">Afficher le badge</span>
-      <label class="toggle"><input type="checkbox" id="showBadge" checked onchange="updateCard()"><span class="tslider"></span></label>
+      <label class="toggle"><input type="checkbox" id="darkCard" onchange="updateCard();saveSettings()"><span class="tslider"></span></label>
     </div>
   </div>
-  <button class="btn-dl" id="dlBtn" onclick="downloadCard()">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Télécharger en JPG
-  </button>
+  <div class="sec">
+    <div class="sec-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Exporter
+    </div>
+    <button class="btn-dl" id="dlBtn" onclick="downloadCard('jpg')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:15px;height:15px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Télécharger JPG
+    </button>
+    <button class="btn-dl secondary" id="dlBtnPng" onclick="downloadCard('png')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:15px;height:15px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Télécharger PNG (transparent)
+    </button>
+  </div>
 </div>
-<div class="preview-area">
-<div id="card">
-  <div class="card-header" id="cHeader">
-    <div class="logo-area">
-      <div id="cLogoDefault">
-        <svg viewBox="0 0 60 60" width="40" height="40"><circle cx="30" cy="30" r="27" fill="none" stroke="#ccc" stroke-width="2"/><path d="M10 27Q20 15 30 22Q40 15 50 27" fill="none" stroke="#bbb" stroke-width="2.5" stroke-linecap="round"/><path d="M10 33Q20 21 30 28Q40 21 50 33" fill="none" stroke="#bbb" stroke-width="2.5" stroke-linecap="round"/></svg>
+<div class="preview-area" id="previewArea">
+  <div class="preview-meta" id="previewMeta">
+    <b id="previewFormatLabel">800 × 800 px</b> &nbsp;·&nbsp; Glissez les blocs ↕ pour réorganiser
+  </div>
+  <div id="card">
+    <div class="card-header" id="cHeader">
+      <div class="logo-area">
+        <div id="cLogoDefault">
+          <svg viewBox="0 0 60 60" width="40" height="40"><circle cx="30" cy="30" r="27" fill="none" stroke="#ccc" stroke-width="2"/><path d="M10 27Q20 15 30 22Q40 15 50 27" fill="none" stroke="#bbb" stroke-width="2.5" stroke-linecap="round"/><path d="M10 33Q20 21 30 28Q40 21 50 33" fill="none" stroke="#bbb" stroke-width="2.5" stroke-linecap="round"/></svg>
+        </div>
+        <img id="cLogoImg" src="" alt="Logo">
+        <div class="dealer-name" id="cDealer">Nom de la concessionnaire</div>
       </div>
-      <img id="cLogoImg" src="" alt="Logo">
-      <div class="dealer-name" id="cDealer">Les Garages François</div>
-    </div>
-    <div class="card-title-area">
-      <span class="card-brand" id="cBrand">CITROËN C5 AIRCROSS BLUEHDI</span>
-      <span class="card-year" id="cYear" style="color:#ff0000">2022</span>
-    </div>
-  </div>
-  <div class="card-img-wrap">
-    <div class="img-placeholder" id="cImgPlaceholder">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-      <span>Importez une photo du véhicule</span>
-    </div>
-    <img id="cardImg" src="" alt="vehicle">
-    <div class="badge-wrap" id="cBadgeWrap">
-      <div class="badge-inner" id="cBadgeInner" style="background:#ff0000">D'occasion</div>
-    </div>
-  </div>
-  <div class="card-stats">
-    <div class="stat">
-      <div class="stat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></div>
-      <div><div class="stat-val" id="cPrice">33.490 €</div><div class="stat-lbl">Prix</div></div>
-    </div>
-    <div class="stat">
-      <div class="stat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 11-6.32 17.77"/><path d="M12 6v2M6 12H4M8.46 8.46L7.05 7.05M12 12l3-4"/><circle cx="12" cy="12" r="1" fill="#555"/></svg></div>
-      <div><div class="stat-val" id="cPower">131 ch</div><div class="stat-lbl">Puissance</div></div>
-    </div>
-    <div class="stat">
-      <div class="stat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0112 2a8 8 0 018 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg></div>
-      <div><div class="stat-val" id="cMileage">19.900</div><div class="stat-lbl">Kilométrage</div></div>
-    </div>
-    <div class="stat" id="cFuelStat" style="flex:0.9">
-      <div class="stat-ico" id="cFuelIco">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22V6a2 2 0 012-2h8a2 2 0 012 2v16M3 22h14M7 22V12h4v10"/><path d="M17 4h1a2 2 0 012 2v3.5a1.5 1.5 0 003 0V7l-2-3"/></svg>
+      <div class="card-title-area">
+        <span class="card-brand" id="cBrand">Nom du véhicule</span>
+        <span class="card-year" id="cYear" style="color:#ff0000">Année</span>
       </div>
-      <div><div class="stat-val" id="cFuelLabel" style="font-size:16px">Diesel</div><div class="stat-lbl">Énergie</div></div>
     </div>
-    <div class="stat-tx" id="cTxWrap" style="background:#1a1a1a">
-      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" style="width:22px;height:22px;flex-shrink:0"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
-      <div class="stat-tx-text" id="cTx">BOITE AUTOMATIQUE<br>8 RAPPORTS</div>
+    <div id="cardSortable" style="flex:1;display:flex;flex-direction:column;min-height:0;overflow:hidden">
+      <div class="card-img-wrap" id="cImgSection">
+        <div class="img-placeholder" id="cImgPlaceholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>Importez une photo du véhicule</span>
+        </div>
+        <img id="cardImg" src="" alt="vehicle">
+        <div class="status-overlay" id="cStatusOverlay" style="display:none">
+          <div class="status-text" id="cStatusText">VENDU</div>
+        </div>
+        <div class="garantie-badge" id="cGarantieBadge">Garantie 12 mois</div>
+        <div class="critair-badge" id="cCritairBadge"></div>
+        <div class="co2-badge" id="cCo2Badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="width:10px;height:10px"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M12 7a4 4 0 110 8"/><path d="M22 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+          <span id="cCo2Text"></span>
+        </div>
+        <div class="badge-wrap" id="cBadgeWrap">
+          <div class="badge-inner" id="cBadgeInner" style="background:#ff0000">D'occasion</div>
+        </div>
+        <div class="sort-handle" title="Déplacer">⠿</div>
+      </div>
+      <div class="card-financement" id="cFinancement" style="background:#1a1a1a">
+        <div class="fin-main" id="cFinAmount">À partir de 399 €/mois</div>
+        <div class="fin-legal" id="cFinLegal">Sous réserve d'acceptation. Apport 3 000€. Durée 48 mois.</div>
+        <div class="sort-handle" title="Déplacer">⠿</div>
+      </div>
+      <div class="card-stats" id="cStatsSection">
+        <div class="stat">
+          <div class="stat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></div>
+          <div><div class="stat-val" id="cPrice">33.490 €</div><div class="stat-lbl">Prix</div></div>
+        </div>
+        <div class="stat">
+          <div class="stat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 11-6.32 17.77"/><path d="M12 6v2M6 12H4M8.46 8.46L7.05 7.05M12 12l3-4"/><circle cx="12" cy="12" r="1" fill="#555"/></svg></div>
+          <div><div class="stat-val" id="cPower">131 ch</div><div class="stat-lbl">Puissance</div></div>
+        </div>
+        <div class="stat">
+          <div class="stat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0112 2a8 8 0 018 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <div><div class="stat-val" id="cMileage">19.900</div><div class="stat-lbl">Km</div></div>
+        </div>
+        <div class="stat" id="cFuelStat" style="flex:0.9">
+          <div class="stat-ico" id="cFuelIco">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22V6a2 2 0 012-2h8a2 2 0 012 2v16M3 22h14M7 22V12h4v10"/><path d="M17 4h1a2 2 0 012 2v3.5a1.5 1.5 0 003 0V7l-2-3"/></svg>
+          </div>
+          <div><div class="stat-val" id="cFuelLabel" style="font-size:16px">Diesel</div><div class="stat-lbl">Énergie</div></div>
+        </div>
+        <div class="stat-tx" id="cTxWrap" style="background:#1a1a1a">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" style="width:22px;height:22px;flex-shrink:0"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+          <div class="stat-tx-text" id="cTx">BOITE AUTOMATIQUE<br>8 RAPPORTS</div>
+        </div>
+        <div class="sort-handle" title="Déplacer">⠿</div>
+      </div>
+      <div class="card-options" id="cOptsSection">
+        <div class="opts-grid" id="cOptsGrid"></div>
+        <div class="sort-handle" title="Déplacer">⠿</div>
+      </div>
     </div>
-  </div>
-  <div class="card-options" id="cOptsSection">
-    <div class="opts-grid" id="cOptsGrid"></div>
-  </div>
-  <div class="card-footer" id="cFooter" style="background:#ff0000">
-    <div>
-      <div class="footer-lbl">Plus d'info au</div>
-      <div class="footer-phone" id="cPhone">03 23 39 12 55</div>
-    </div>
-    <div class="footer-right">
-      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-      <div class="footer-addr" id="cAddress">Route de Chauny 02700 Condren</div>
+    <div class="card-footer" id="cFooter" style="background:#ff0000">
+      <div>
+        <div class="footer-lbl">Plus d'info au</div>
+        <div class="footer-phone" id="cPhone">03 23 39 12 55</div>
+      </div>
+      <div class="footer-qr" id="cQRWrap">
+        <div id="cQRCode"></div>
+      </div>
+      <div class="footer-right">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <div class="footer-addr" id="cAddress">Route de Chauny 02700 Condren</div>
+      </div>
     </div>
   </div>
 </div>
 </div>
+<div id="cropModal" class="modal-overlay" style="display:none">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>✂ Recadrer la photo du véhicule</h3>
+      <button class="modal-close" onclick="closeCropModal()">✕</button>
+    </div>
+    <div class="crop-container">
+      <img id="cropImg" src="" alt="">
+    </div>
+    <div class="modal-footer">
+      <button class="btn-sm" onclick="closeCropModal()">Annuler</button>
+      <button class="btn-apply" onclick="applyCrop()">✓ Appliquer</button>
+    </div>
+  </div>
 </div>
 <script src="script.js"></script>
 </body>
